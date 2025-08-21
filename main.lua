@@ -826,6 +826,56 @@ function library.new(library_title, cfg_location)
 
                             return keybind
                         end
+						function element:SetValues(new_options)
+						    -- очистка старых кнопок
+						    for _,child in ipairs(DropdownScroll:GetChildren()) do
+						        if child:IsA("TextButton") then
+						            child:Destroy()
+						        end
+						    end
+						
+						    data.options = new_options
+						    local options_num = #data.options
+						    if options_num >= 4 then
+						        DropdownScroll.Size = UDim2.new(0, 260, 0, 80)
+						        DropdownScroll.CanvasSize = UDim2.new(0, 0, 0, 20 * options_num)
+						    else
+						        DropdownScroll.Size = UDim2.new(0, 260, 0, 20 * options_num)
+						        DropdownScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+						    end
+						
+						    -- пересоздать кнопки
+						    for _,v in ipairs(new_options) do
+						        local Button = library:create("TextButton", {
+						            BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+						            BorderSizePixel = 0,
+						            Size = UDim2.new(1, 0, 0, 20),
+						            AutoButtonColor = false,
+						            Text = "",
+						            ZIndex = 2,
+						        }, DropdownScroll)
+						
+						        local ButtonText = library:create("TextLabel", {
+						            BackgroundTransparency = 1,
+						            Position = UDim2.new(0, 8, 0, 0),
+						            Size = UDim2.new(0, 245, 1, 0),
+						            Font = Enum.Font.Ubuntu,
+						            Text = v,
+						            TextColor3 = Color3.fromRGB(150, 150, 150),
+						            TextSize = 14,
+						            TextXAlignment = Enum.TextXAlignment.Left,
+						            ZIndex = 2,
+						        }, Button)
+						
+						        Button.MouseButton1Down:Connect(function()
+						            DropdownScroll.Visible = false
+						            DropdownButtonText.Text = v
+						            value.Dropdown = v
+						            do_callback()
+						        end)
+						    end
+						end
+
                         function element:add_color(color_default, has_transparency, color_callback)
                             if has_extra then return end
                             has_extra = true
