@@ -465,7 +465,9 @@ function library.new(library_title, cfg_location)
                 local UIPadding = library:create("UIPadding", {
                     PaddingTop = UDim.new(0, 12),
                 }, Container)
-
+				UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+				    Border.Size = UDim2.new(1, 0, 0, UIListLayout.AbsoluteContentSize.Y + 20)
+				end)
                 local SectorTitle = library:create("TextLabel", {
                     Name = "Title",
                     AnchorPoint = Vector2.new(0.5, 0),
