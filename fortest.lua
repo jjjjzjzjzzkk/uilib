@@ -384,30 +384,36 @@ function library.new(library_title, cfg_location)
                 Visible = false,
             }, TabFrames)
 
-            local Left = library:create("Frame", {
-                Name = "Left",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0, 8, 0, 14),
-                Size = UDim2.new(0, 282, 0, 500),
-            }, SectionFrame)
-
-            local UIListLayout = library:create("UIListLayout", {
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                SortOrder = Enum.SortOrder.LayoutOrder,
-                Padding = UDim.new(0, 12),
-            }, Left)
-            local Right = library:create("Frame", {
-                Name = "Right",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0, 298, 0, 14),
-                Size = UDim2.new(0, 282, 0, 500),
-            }, SectionFrame)
-
-            local UIListLayout = library:create("UIListLayout", {
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                SortOrder = Enum.SortOrder.LayoutOrder,
-                Padding = UDim.new(0, 12),
-            }, Right)
+           local Left = library:create("ScrollingFrame", {
+			    Name = "Left",
+			    BackgroundTransparency = 1,
+			    Position = UDim2.new(0, 8, 0, 14),
+			    Size = UDim2.new(0, 282, 0, 395), -- размер окна (фиксированная "область")
+			    CanvasSize = UDim2.new(),
+			    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+			    ScrollBarThickness = 3, -- можешь поставить 0 если скроллбар не нужен
+			}, SectionFrame)
+			
+			local UIListLayout = library:create("UIListLayout", {
+			    HorizontalAlignment = Enum.HorizontalAlignment.Center,
+			    SortOrder = Enum.SortOrder.LayoutOrder,
+			    Padding = UDim.new(0, 12),
+			}, Left)
+            local Right = library:create("ScrollingFrame", {
+			    Name = "Right",
+			    BackgroundTransparency = 1,
+			    Position = UDim2.new(0, 8, 0, 14),
+			    Size = UDim2.new(0, 282, 0, 395), -- размер окна (фиксированная "область")
+			    CanvasSize = UDim2.new(),
+			    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+			    ScrollBarThickness = 3, -- можешь поставить 0 если скроллбар не нужен
+			}, SectionFrame)
+			
+			local UIListLayout = library:create("UIListLayout", {
+			    HorizontalAlignment = Enum.HorizontalAlignment.Center,
+			    SortOrder = Enum.SortOrder.LayoutOrder,
+			    Padding = UDim.new(0, 12),
+			}, Right)
             SectionButton.MouseButton1Down:Connect(function()
                 for _,SectionButtons in pairs (TabSections:GetChildren()) do
                     if SectionButtons:IsA("UIListLayout") then continue end
