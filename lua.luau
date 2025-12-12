@@ -1732,33 +1732,6 @@ function Compkiller:CacheImage(id: string) : string
     return id  
 end
 
-function Compkiller:PreloadIcons()
-    Compkiller.__PRELOADING_ICONS = true
-    local RequiredAssets = {
-        "rbxassetid://112554223509763", "rbxassetid://4805639000", "rbxassetid://6198493000",
-        "rbxassetid://10709790948", "rbxassetid://18518299306", "rbxassetid://10747362393",
-        "rbxassetid://18720640102", "rbxassetid://10723344270", "rbxassetid://109535175596957",
-        "rbxassetid://10747384394", "rbxassetid://10734941499", Compkiller.Logo,
-    }
-    
-    if Compkiller.SecureMode then
-        for _, asset in ipairs(RequiredAssets) do
-            task.spawn(function()
-                pcall(function()
-                    Compkiller:CacheImage(asset)
-                end)
-            end)
-        end
-    else
-        local ContentProvider = game:GetService("ContentProvider")
-        ContentProvider:Preload(RequiredAssets)
-    end
-    
-    task.delay(1, function()
-        Compkiller.__PRELOADING_ICONS = false
-    end)
-end
-
 function Compkiller:Security(directory: string,Config: SecurityConfig) -- Security Mode
 	directory = directory or "blydinet-cache";
 
