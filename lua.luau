@@ -9772,45 +9772,24 @@ function Compkiller.new(Config : Window)
 		end;
 
 		function WindowArgs:Toggle(Value: boolean)
-		    if Value == WindowArgs.IsOpen then return end
-		    
-		    WindowArgs.IsOpen = Value
-		    WindowOpen:Fire(Value)
-		    
-		    if not Value then
-		        for _, thread in ipairs(WindowArgs.THREADS) do
-		            if typeof(thread) == "thread" then
-		                pcall(function() task.cancel(thread) end)
-		            end
-		        end
-		
-		        for _, tab in ipairs(WindowArgs.Tabs) do
-		            if tab.Connection then
-		                tab.Connection:Disconnect()
-		                tab.Connection = nil
-		            end
-		        end
-		        
-		        if WindowArgs.UserSettings and WindowArgs.UserSettings.Root then
-		            WindowArgs.UserSettings.Root:Destroy()
-		            WindowArgs.UserSettings = nil
-		        end
-		        
-		        WindowArgs.THREADS = {}
-		    end
-		    
-		    if Value then
-		        for i,v in next, WindowArgs.Tabs do
-		            if v.Root == WindowArgs.SelectedTab then
-		                v.Remote:Fire(true)
-		            end
-		        end
-		    else
-		        for i,v in next, WindowArgs.Tabs do
-		            v.Remote:Fire(false)
-		        end
-		    end
-		end
+			if WindowArgs.PerformanceMode then
+				MainFrame.Visible = Value;
+			end;
+
+			WindowOpen:Fire(Value);
+
+			if Value then
+				for i,v in next , WindowArgs.Tabs do
+					if v.Root == WindowArgs.SelectedTab then
+						v.Remote:Fire(true);
+					end;
+				end;
+			else
+				for i,v in next , WindowArgs.Tabs do
+					v.Remote:Fire(false);
+				end;
+			end;
+		end;
 
 		function WindowArgs:_ToggleUI()
 			WindowArgs.IsOpen = not WindowArgs.IsOpen;
