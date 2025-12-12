@@ -5289,7 +5289,7 @@ function Compkiller:SetTheme(name)
 			["Risky"] = Color3.new(0.0310345, 0.819572, 1),
 			["StrokeColor"] = Color3.new(0, 0.119857, 0.248276),
 			["SwitchColor"] = Color3.new(1, 1, 1),
-			["Toggle"] = Color3.new(0.054902, 0.463935, 0.835294)
+			["Toggle"] = Color3.new(0.054902, 0.463935, 0.835294),
 		},
 	elseif name == "Purple Rose" then
 		Compkiller.Colors = {
@@ -5304,7 +5304,7 @@ function Compkiller:SetTheme(name)
 			["Risky"] = Color3.new(1, 0.6086, 0.152941),
 			["StrokeColor"] = Color3.new(0.148499, 0.137836, 0.248276),
 			["SwitchColor"] = Color3.new(1, 1, 1),
-			["Toggle"] = Color3.new(0.835294, 0.054902, 0.248654)
+			["Toggle"] = Color3.new(0.835294, 0.054902, 0.248654),
 		},
 	elseif name == "Neon Pink" then
     Compkiller.Colors = {
@@ -5319,7 +5319,7 @@ function Compkiller:SetTheme(name)
         ["Risky"] = Color3.fromRGB(255, 215, 0), 
         ["StrokeColor"] = Color3.fromRGB(40, 22, 47),
         ["SwitchColor"] = Color3.fromRGB(255, 240, 245),
-        ["Toggle"] = Color3.fromRGB(219, 112, 147) 
+        ["Toggle"] = Color3.fromRGB(219, 112, 147), 
     },
 	elseif name == "Purple Magic" then
     Compkiller.Colors = {
@@ -5334,7 +5334,7 @@ function Compkiller:SetTheme(name)
         ["Risky"] = Color3.fromRGB(255, 140, 0), 
         ["StrokeColor"] = Color3.fromRGB(35, 18, 55),
         ["SwitchColor"] = Color3.fromRGB(240, 230, 255),
-        ["Toggle"] = Color3.fromRGB(138, 43, 226) 
+        ["Toggle"] = Color3.fromRGB(138, 43, 226), 
     },
 	elseif name == "Pastel Pink" then
     Compkiller.Colors = {
@@ -5349,23 +5349,8 @@ function Compkiller:SetTheme(name)
         ["Risky"] = Color3.fromRGB(255, 223, 186), 
         ["StrokeColor"] = Color3.fromRGB(50, 35, 47),
         ["SwitchColor"] = Color3.fromRGB(255, 250, 250),
-        ["Toggle"] = Color3.fromRGB(219, 112, 147) 
+        ["Toggle"] = Color3.fromRGB(219, 112, 147), 
     },
-	elseif name == "Rose Pink" then
-	    Compkiller.Colors = {
-	        BGDBColor      = Color3.fromRGB(40, 20, 35),
-	        BlockBackground= Color3.fromRGB(77, 35, 63),
-	        BlockColor     = Color3.fromRGB(93, 45, 78),
-	        DropColor      = Color3.fromRGB(120, 55, 100),
-	        HighStrokeColor= Color3.fromRGB(145, 65, 120),
-	        Highlight      = Color3.fromRGB(255, 105, 180),
-	        LineColor      = Color3.fromRGB(160, 90, 145),
-	        MouseEnter     = Color3.fromRGB(255, 135, 200),
-	        Risky          = Color3.fromRGB(255, 170, 120),
-	        StrokeColor    = Color3.fromRGB(100, 55, 90),
-	        SwitchColor    = Color3.fromRGB(255, 255, 255),
-	        Toggle         = Color3.fromRGB(255, 85, 165)
-	    },
 	elseif name == "Purple Gradient" then
     Compkiller.Colors = {
         ["BGDBColor"] = Color3.fromRGB(18, 8, 28),
@@ -5379,7 +5364,7 @@ function Compkiller:SetTheme(name)
         ["Risky"] = Color3.fromRGB(255, 200, 0), 
         ["StrokeColor"] = Color3.fromRGB(40, 18, 60),
         ["SwitchColor"] = Color3.fromRGB(245, 235, 255),
-        ["Toggle"] = Color3.fromRGB(153, 50, 204) 
+        ["Toggle"] = Color3.fromRGB(153, 50, 204), 
     },
 elseif name == "Dark Purple" then
     Compkiller.Colors = {
@@ -5394,7 +5379,7 @@ elseif name == "Dark Purple" then
         ["Risky"] = Color3.fromRGB(255, 69, 0),
         ["StrokeColor"] = Color3.fromRGB(30, 18, 35),
         ["SwitchColor"] = Color3.fromRGB(230, 220, 240),
-        ["Toggle"] = Color3.fromRGB(75, 0, 130) 
+        ["Toggle"] = Color3.fromRGB(75, 0, 130), 
     },
 elseif name == "Cosmic Purple" then
     Compkiller.Colors = {
@@ -5409,7 +5394,7 @@ elseif name == "Cosmic Purple" then
         ["Risky"] = Color3.fromRGB(255, 140, 0), 
         ["StrokeColor"] = Color3.fromRGB(22, 10, 35),
         ["SwitchColor"] = Color3.fromRGB(230, 220, 245),
-        ["Toggle"] = Color3.fromRGB(106, 13, 173)
+        ["Toggle"] = Color3.fromRGB(106, 13, 173),
     },
 	elseif name == "Skeet" then		
 		Compkiller.Colors = {
