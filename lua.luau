@@ -1,3 +1,19 @@
+--[[
+    		Compkiller Interface
+
+    Author: 4lpaca
+    License: MIT
+    Github: https://github.com/4lpaca-pin/CompKiller
+    Version: 2.4
+    Original: compkiller.net
+
+        Version: 2.4
+    - Fixed some bug
+    - Added Secure mode > Compkiller:Security("Cache-Directory")
+        Secure mode: this will cache all images to your workspace and disabled blur
+--]]
+
+--- Export Types ---
 
 export type cloneref = (target: Instance) -> Instance;
 
@@ -46,19 +62,6 @@ export type ConfigFunctions = {
 			}
 		}	
 	},
-};
-
-export type KeybindSettings = {
-	Key : string,
-	On : boolean | number,
-	Off : boolean | number,
-	Mode : number,
-	Name : string,
-}
-
-export type Config = {
-	BlurEnabled : boolean,
-	ImageScale: number,
 };
 
 export type Notify = {
@@ -191,16 +194,10 @@ export type Paragraph = {
 	Content: string
 }
 
-pcall(function() -- for Luraph
+pcall(function()
 	local Constant = table.concat({"LP","H_NO"}).."_VI".."RTU".."AL".."IZE";
 	getfenv()[Constant] = getfenv()[Constant] or function(f) return f end; 
 	-- LPH_NO_VIRTUALIZE
-end);
-
-pcall(function() -- for IB1
-	local Constant = "IB".."_NO_VI".."RTU".."AL".."IZE";
-	getfenv()[Constant] = getfenv()[Constant] or function(f) return f end; 
-	-- IB_NO_VIRTUALIZE
 end);
 
 getgenv = getgenv or getfenv;
@@ -340,7 +337,7 @@ local Mouse: Mouse = LocalPlayer:GetMouse();
 local CurrentCamera: Camera? = cloneref(workspace.CurrentCamera);
 
 local Compkiller = {
-	Version = '2.6',
+	Version = '2.4',
 	Logo = "rbxassetid://120245531583106",
 	Windows = {},
 	Scale = {
@@ -349,9 +346,6 @@ local Compkiller = {
 		TabOpen = 185,
 		TabClose = 85,
 	},
-	PerformanceMode = false,
-	WindowsNil = {},
-	NilFolder = Instance.new('Folder'),
 	ArcylicParent = CurrentCamera,
 	ProtectGui = protect_gui or protectgui or (syn and syn.protect_gui) or function(s) return s; end,
 };
@@ -391,6 +385,827 @@ Compkiller.LastDrag = tick();
 Compkiller.Flags = {};
 
 Compkiller.Lucide = {
+	['lucide-mouse-2'] = "rbxassetid://10088146939",
+	['lucide-internet'] = "rbxassetid://12785195438",
+	['lucide-earth'] = "rbxassetid://115986292591138",
+	['lucide-settings-3'] = "rbxassetid://14007344336",
+	["lucide-accessibility"] = "rbxassetid://10709751939",
+	["lucide-activity"] = "rbxassetid://10709752035",
+	["lucide-air-vent"] = "rbxassetid://10709752131",
+	["lucide-airplay"] = "rbxassetid://10709752254",
+	["lucide-alarm-check"] = "rbxassetid://10709752405",
+	["lucide-alarm-clock"] = "rbxassetid://10709752630",
+	["lucide-alarm-clock-off"] = "rbxassetid://10709752508",
+	["lucide-alarm-minus"] = "rbxassetid://10709752732",
+	["lucide-alarm-plus"] = "rbxassetid://10709752825",
+	["lucide-album"] = "rbxassetid://10709752906",
+	["lucide-alert-circle"] = "rbxassetid://10709752996",
+	["lucide-alert-octagon"] = "rbxassetid://10709753064",
+	["lucide-alert-triangle"] = "rbxassetid://10709753149",
+	["lucide-align-center"] = "rbxassetid://10709753570",
+	["lucide-align-center-horizontal"] = "rbxassetid://10709753272",
+	["lucide-align-center-vertical"] = "rbxassetid://10709753421",
+	["lucide-align-end-horizontal"] = "rbxassetid://10709753692",
+	["lucide-align-end-vertical"] = "rbxassetid://10709753808",
+	["lucide-align-horizontal-distribute-center"] = "rbxassetid://10747779791",
+	["lucide-align-horizontal-distribute-end"] = "rbxassetid://10747784534",
+	["lucide-align-horizontal-distribute-start"] = "rbxassetid://10709754118",
+	["lucide-align-horizontal-justify-center"] = "rbxassetid://10709754204",
+	["lucide-align-horizontal-justify-end"] = "rbxassetid://10709754317",
+	["lucide-align-horizontal-justify-start"] = "rbxassetid://10709754436",
+	["lucide-align-horizontal-space-around"] = "rbxassetid://10709754590",
+	["lucide-align-horizontal-space-between"] = "rbxassetid://10709754749",
+	["lucide-align-justify"] = "rbxassetid://10709759610",
+	["lucide-align-left"] = "rbxassetid://10709759764",
+	["lucide-align-right"] = "rbxassetid://10709759895",
+	["lucide-align-start-horizontal"] = "rbxassetid://10709760051",
+	["lucide-align-start-vertical"] = "rbxassetid://10709760244",
+	["lucide-align-vertical-distribute-center"] = "rbxassetid://10709760351",
+	["lucide-align-vertical-distribute-end"] = "rbxassetid://10709760434",
+	["lucide-align-vertical-distribute-start"] = "rbxassetid://10709760612",
+	["lucide-align-vertical-justify-center"] = "rbxassetid://10709760814",
+	["lucide-align-vertical-justify-end"] = "rbxassetid://10709761003",
+	["lucide-align-vertical-justify-start"] = "rbxassetid://10709761176",
+	["lucide-align-vertical-space-around"] = "rbxassetid://10709761324",
+	["lucide-align-vertical-space-between"] = "rbxassetid://10709761434",
+	["lucide-anchor"] = "rbxassetid://10709761530",
+	["lucide-angry"] = "rbxassetid://10709761629",
+	["lucide-annoyed"] = "rbxassetid://10709761722",
+	["lucide-aperture"] = "rbxassetid://10709761813",
+	["lucide-apple"] = "rbxassetid://10709761889",
+	["lucide-archive"] = "rbxassetid://10709762233",
+	["lucide-archive-restore"] = "rbxassetid://10709762058",
+	["lucide-armchair"] = "rbxassetid://10709762327",
+	["lucide-arrow-big-down"] = "rbxassetid://10747796644",
+	["lucide-arrow-big-left"] = "rbxassetid://10709762574",
+	["lucide-arrow-big-right"] = "rbxassetid://10709762727",
+	["lucide-arrow-big-up"] = "rbxassetid://10709762879",
+	["lucide-arrow-down"] = "rbxassetid://10709767827",
+	["lucide-arrow-down-circle"] = "rbxassetid://10709763034",
+	["lucide-arrow-down-left"] = "rbxassetid://10709767656",
+	["lucide-arrow-down-right"] = "rbxassetid://10709767750",
+	["lucide-arrow-left"] = "rbxassetid://10709768114",
+	["lucide-arrow-left-circle"] = "rbxassetid://10709767936",
+	["lucide-arrow-left-right"] = "rbxassetid://10709768019",
+	["lucide-arrow-right"] = "rbxassetid://10709768347",
+	["lucide-arrow-right-circle"] = "rbxassetid://10709768226",
+	["lucide-arrow-up"] = "rbxassetid://10709768939",
+	["lucide-arrow-up-circle"] = "rbxassetid://10709768432",
+	["lucide-arrow-up-down"] = "rbxassetid://10709768538",
+	["lucide-arrow-up-left"] = "rbxassetid://10709768661",
+	["lucide-arrow-up-right"] = "rbxassetid://10709768787",
+	["lucide-asterisk"] = "rbxassetid://10709769095",
+	["lucide-at-sign"] = "rbxassetid://10709769286",
+	["lucide-award"] = "rbxassetid://10709769406",
+	["lucide-axe"] = "rbxassetid://10709769508",
+	["lucide-axis-3d"] = "rbxassetid://10709769598",
+	["lucide-baby"] = "rbxassetid://10709769732",
+	["lucide-backpack"] = "rbxassetid://10709769841",
+	["lucide-baggage-claim"] = "rbxassetid://10709769935",
+	["lucide-banana"] = "rbxassetid://10709770005",
+	["lucide-banknote"] = "rbxassetid://10709770178",
+	["lucide-bar-chart"] = "rbxassetid://10709773755",
+	["lucide-bar-chart-2"] = "rbxassetid://10709770317",
+	["lucide-bar-chart-3"] = "rbxassetid://10709770431",
+	["lucide-bar-chart-4"] = "rbxassetid://10709770560",
+	["lucide-bar-chart-horizontal"] = "rbxassetid://10709773669",
+	["lucide-barcode"] = "rbxassetid://10747360675",
+	["lucide-baseline"] = "rbxassetid://10709773863",
+	["lucide-bath"] = "rbxassetid://10709773963",
+	["lucide-battery"] = "rbxassetid://10709774640",
+	["lucide-battery-charging"] = "rbxassetid://10709774068",
+	["lucide-battery-full"] = "rbxassetid://10709774206",
+	["lucide-battery-low"] = "rbxassetid://10709774370",
+	["lucide-battery-medium"] = "rbxassetid://10709774513",
+	["lucide-beaker"] = "rbxassetid://10709774756",
+	["lucide-bed"] = "rbxassetid://10709775036",
+	["lucide-bed-double"] = "rbxassetid://10709774864",
+	["lucide-bed-single"] = "rbxassetid://10709774968",
+	["lucide-beer"] = "rbxassetid://10709775167",
+	["lucide-bell"] = "rbxassetid://10709775704",
+	["lucide-bell-minus"] = "rbxassetid://10709775241",
+	["lucide-bell-off"] = "rbxassetid://10709775320",
+	["lucide-bell-plus"] = "rbxassetid://10709775448",
+	["lucide-bell-ring"] = "rbxassetid://10709775560",
+	["lucide-bike"] = "rbxassetid://10709775894",
+	["lucide-binary"] = "rbxassetid://10709776050",
+	["lucide-bitcoin"] = "rbxassetid://10709776126",
+	["lucide-bluetooth"] = "rbxassetid://10709776655",
+	["lucide-bluetooth-connected"] = "rbxassetid://10709776240",
+	["lucide-bluetooth-off"] = "rbxassetid://10709776344",
+	["lucide-bluetooth-searching"] = "rbxassetid://10709776501",
+	["lucide-bold"] = "rbxassetid://10747813908",
+	["lucide-bomb"] = "rbxassetid://10709781460",
+	["lucide-bone"] = "rbxassetid://10709781605",
+	["lucide-book"] = "rbxassetid://10709781824",
+	["lucide-book-open"] = "rbxassetid://10709781717",
+	["lucide-bookmark"] = "rbxassetid://10709782154",
+	["lucide-bookmark-minus"] = "rbxassetid://10709781919",
+	["lucide-bookmark-plus"] = "rbxassetid://10709782044",
+	["lucide-bot"] = "rbxassetid://10709782230",
+	["lucide-box"] = "rbxassetid://10709782497",
+	["lucide-box-select"] = "rbxassetid://10709782342",
+	["lucide-boxes"] = "rbxassetid://10709782582",
+	["lucide-briefcase"] = "rbxassetid://10709782662",
+	["lucide-brush"] = "rbxassetid://10709782758",
+	["lucide-bug"] = "rbxassetid://10709782845",
+	["lucide-building"] = "rbxassetid://10709783051",
+	["lucide-building-2"] = "rbxassetid://10709782939",
+	["lucide-bus"] = "rbxassetid://10709783137",
+	["lucide-cake"] = "rbxassetid://10709783217",
+	["lucide-calculator"] = "rbxassetid://10709783311",
+	["lucide-calendar"] = "rbxassetid://10709789505",
+	["lucide-calendar-check"] = "rbxassetid://10709783474",
+	["lucide-calendar-check-2"] = "rbxassetid://10709783392",
+	["lucide-calendar-clock"] = "rbxassetid://10709783577",
+	["lucide-calendar-days"] = "rbxassetid://10709783673",
+	["lucide-calendar-heart"] = "rbxassetid://10709783835",
+	["lucide-calendar-minus"] = "rbxassetid://10709783959",
+	["lucide-calendar-off"] = "rbxassetid://10709788784",
+	["lucide-calendar-plus"] = "rbxassetid://10709788937",
+	["lucide-calendar-range"] = "rbxassetid://10709789053",
+	["lucide-calendar-search"] = "rbxassetid://10709789200",
+	["lucide-calendar-x"] = "rbxassetid://10709789407",
+	["lucide-calendar-x-2"] = "rbxassetid://10709789329",
+	["lucide-camera"] = "rbxassetid://10709789686",
+	["lucide-camera-off"] = "rbxassetid://10747822677",
+	["lucide-car"] = "rbxassetid://10709789810",
+	["lucide-carrot"] = "rbxassetid://10709789960",
+	["lucide-cast"] = "rbxassetid://10709790097",
+	["lucide-charge"] = "rbxassetid://10709790202",
+	["lucide-check"] = "rbxassetid://10709790644",
+	["lucide-check-circle"] = "rbxassetid://10709790387",
+	["lucide-check-circle-2"] = "rbxassetid://10709790298",
+	["lucide-check-square"] = "rbxassetid://10709790537",
+	["lucide-chef-hat"] = "rbxassetid://10709790757",
+	["lucide-cherry"] = "rbxassetid://10709790875",
+	["lucide-chevron-down"] = "rbxassetid://10709790948",
+	["lucide-chevron-first"] = "rbxassetid://10709791015",
+	["lucide-chevron-last"] = "rbxassetid://10709791130",
+	["lucide-chevron-left"] = "rbxassetid://10709791281",
+	["lucide-chevron-right"] = "rbxassetid://10709791437",
+	["lucide-chevron-up"] = "rbxassetid://10709791523",
+	["lucide-chevrons-down"] = "rbxassetid://10709796864",
+	["lucide-chevrons-down-up"] = "rbxassetid://10709791632",
+	["lucide-chevrons-left"] = "rbxassetid://10709797151",
+	["lucide-chevrons-left-right"] = "rbxassetid://10709797006",
+	["lucide-chevrons-right"] = "rbxassetid://10709797382",
+	["lucide-chevrons-right-left"] = "rbxassetid://10709797274",
+	["lucide-chevrons-up"] = "rbxassetid://10709797622",
+	["lucide-chevrons-up-down"] = "rbxassetid://10709797508",
+	["lucide-chrome"] = "rbxassetid://10709797725",
+	["lucide-circle"] = "rbxassetid://10709798174",
+	["lucide-circle-dot"] = "rbxassetid://10709797837",
+	["lucide-circle-ellipsis"] = "rbxassetid://10709797985",
+	["lucide-circle-slashed"] = "rbxassetid://10709798100",
+	["lucide-citrus"] = "rbxassetid://10709798276",
+	["lucide-clapperboard"] = "rbxassetid://10709798350",
+	["lucide-clipboard"] = "rbxassetid://10709799288",
+	["lucide-clipboard-check"] = "rbxassetid://10709798443",
+	["lucide-clipboard-copy"] = "rbxassetid://10709798574",
+	["lucide-clipboard-edit"] = "rbxassetid://10709798682",
+	["lucide-clipboard-list"] = "rbxassetid://10709798792",
+	["lucide-clipboard-signature"] = "rbxassetid://10709798890",
+	["lucide-clipboard-type"] = "rbxassetid://10709798999",
+	["lucide-clipboard-x"] = "rbxassetid://10709799124",
+	["lucide-clock"] = "rbxassetid://10709805144",
+	["lucide-clock-1"] = "rbxassetid://10709799535",
+	["lucide-clock-10"] = "rbxassetid://10709799718",
+	["lucide-clock-11"] = "rbxassetid://10709799818",
+	["lucide-clock-12"] = "rbxassetid://10709799962",
+	["lucide-clock-2"] = "rbxassetid://10709803876",
+	["lucide-clock-3"] = "rbxassetid://10709803989",
+	["lucide-clock-4"] = "rbxassetid://10709804164",
+	["lucide-clock-5"] = "rbxassetid://10709804291",
+	["lucide-clock-6"] = "rbxassetid://10709804435",
+	["lucide-clock-7"] = "rbxassetid://10709804599",
+	["lucide-clock-8"] = "rbxassetid://10709804784",
+	["lucide-clock-9"] = "rbxassetid://10709804996",
+	["lucide-cloud"] = "rbxassetid://10709806740",
+	["lucide-cloud-cog"] = "rbxassetid://10709805262",
+	["lucide-cloud-drizzle"] = "rbxassetid://10709805371",
+	["lucide-cloud-fog"] = "rbxassetid://10709805477",
+	["lucide-cloud-hail"] = "rbxassetid://10709805596",
+	["lucide-cloud-lightning"] = "rbxassetid://10709805727",
+	["lucide-cloud-moon"] = "rbxassetid://10709805942",
+	["lucide-cloud-moon-rain"] = "rbxassetid://10709805838",
+	["lucide-cloud-off"] = "rbxassetid://10709806060",
+	["lucide-cloud-rain"] = "rbxassetid://10709806277",
+	["lucide-cloud-rain-wind"] = "rbxassetid://10709806166",
+	["lucide-cloud-snow"] = "rbxassetid://10709806374",
+	["lucide-cloud-sun"] = "rbxassetid://10709806631",
+	["lucide-cloud-sun-rain"] = "rbxassetid://10709806475",
+	["lucide-cloudy"] = "rbxassetid://10709806859",
+	["lucide-clover"] = "rbxassetid://10709806995",
+	["lucide-code"] = "rbxassetid://10709810463",
+	["lucide-code-2"] = "rbxassetid://10709807111",
+	["lucide-codepen"] = "rbxassetid://10709810534",
+	["lucide-codesandbox"] = "rbxassetid://10709810676",
+	["lucide-coffee"] = "rbxassetid://10709810814",
+	["lucide-cog"] = "rbxassetid://10709810948",
+	["lucide-coins"] = "rbxassetid://10709811110",
+	["lucide-columns"] = "rbxassetid://10709811261",
+	["lucide-command"] = "rbxassetid://10709811365",
+	["lucide-compass"] = "rbxassetid://10709811445",
+	["lucide-component"] = "rbxassetid://10709811595",
+	["lucide-concierge-bell"] = "rbxassetid://10709811706",
+	["lucide-connection"] = "rbxassetid://10747361219",
+	["lucide-contact"] = "rbxassetid://10709811834",
+	["lucide-contrast"] = "rbxassetid://10709811939",
+	["lucide-cookie"] = "rbxassetid://10709812067",
+	["lucide-copy"] = "rbxassetid://10709812159",
+	["lucide-copyleft"] = "rbxassetid://10709812251",
+	["lucide-copyright"] = "rbxassetid://10709812311",
+	["lucide-corner-down-left"] = "rbxassetid://10709812396",
+	["lucide-corner-down-right"] = "rbxassetid://10709812485",
+	["lucide-corner-left-down"] = "rbxassetid://10709812632",
+	["lucide-corner-left-up"] = "rbxassetid://10709812784",
+	["lucide-corner-right-down"] = "rbxassetid://10709812939",
+	["lucide-corner-right-up"] = "rbxassetid://10709813094",
+	["lucide-corner-up-left"] = "rbxassetid://10709813185",
+	["lucide-corner-up-right"] = "rbxassetid://10709813281",
+	["lucide-cpu"] = "rbxassetid://10709813383",
+	["lucide-croissant"] = "rbxassetid://10709818125",
+	["lucide-crop"] = "rbxassetid://10709818245",
+	["lucide-cross"] = "rbxassetid://10709818399",
+	["lucide-crosshair"] = "rbxassetid://10709818534",
+	["lucide-crown"] = "rbxassetid://10709818626",
+	["lucide-cup-soda"] = "rbxassetid://10709818763",
+	["lucide-curly-braces"] = "rbxassetid://10709818847",
+	["lucide-currency"] = "rbxassetid://10709818931",
+	["lucide-database"] = "rbxassetid://10709818996",
+	["lucide-delete"] = "rbxassetid://10709819059",
+	["lucide-diamond"] = "rbxassetid://10709819149",
+	["lucide-dice-1"] = "rbxassetid://10709819266",
+	["lucide-dice-2"] = "rbxassetid://10709819361",
+	["lucide-dice-3"] = "rbxassetid://10709819508",
+	["lucide-dice-4"] = "rbxassetid://10709819670",
+	["lucide-dice-5"] = "rbxassetid://10709819801",
+	["lucide-dice-6"] = "rbxassetid://10709819896",
+	["lucide-dices"] = "rbxassetid://10723343321",
+	["lucide-diff"] = "rbxassetid://10723343416",
+	["lucide-disc"] = "rbxassetid://10723343537",
+	["lucide-divide"] = "rbxassetid://10723343805",
+	["lucide-divide-circle"] = "rbxassetid://10723343636",
+	["lucide-divide-square"] = "rbxassetid://10723343737",
+	["lucide-dollar-sign"] = "rbxassetid://10723343958",
+	["lucide-download"] = "rbxassetid://10723344270",
+	["lucide-download-cloud"] = "rbxassetid://10723344088",
+	["lucide-droplet"] = "rbxassetid://10723344432",
+	["lucide-droplets"] = "rbxassetid://10734883356",
+	["lucide-drumstick"] = "rbxassetid://10723344737",
+	["lucide-edit"] = "rbxassetid://10734883598",
+	["lucide-edit-2"] = "rbxassetid://10723344885",
+	["lucide-edit-3"] = "rbxassetid://10723345088",
+	["lucide-egg"] = "rbxassetid://10723345518",
+	["lucide-egg-fried"] = "rbxassetid://10723345347",
+	["lucide-electricity"] = "rbxassetid://10723345749",
+	["lucide-electricity-off"] = "rbxassetid://10723345643",
+	["lucide-equal"] = "rbxassetid://10723345990",
+	["lucide-equal-not"] = "rbxassetid://10723345866",
+	["lucide-eraser"] = "rbxassetid://10723346158",
+	["lucide-euro"] = "rbxassetid://10723346372",
+	["lucide-expand"] = "rbxassetid://10723346553",
+	["lucide-external-link"] = "rbxassetid://10723346684",
+	["lucide-eye"] = "rbxassetid://10723346959",
+	["lucide-eye-off"] = "rbxassetid://10723346871",
+	["lucide-factory"] = "rbxassetid://10723347051",
+	["lucide-fan"] = "rbxassetid://10723354359",
+	["lucide-fast-forward"] = "rbxassetid://10723354521",
+	["lucide-feather"] = "rbxassetid://10723354671",
+	["lucide-figma"] = "rbxassetid://10723354801",
+	["lucide-file"] = "rbxassetid://10723374641",
+	["lucide-file-archive"] = "rbxassetid://10723354921",
+	["lucide-file-audio"] = "rbxassetid://10723355148",
+	["lucide-file-audio-2"] = "rbxassetid://10723355026",
+	["lucide-file-axis-3d"] = "rbxassetid://10723355272",
+	["lucide-file-badge"] = "rbxassetid://10723355622",
+	["lucide-file-badge-2"] = "rbxassetid://10723355451",
+	["lucide-file-bar-chart"] = "rbxassetid://10723355887",
+	["lucide-file-bar-chart-2"] = "rbxassetid://10723355746",
+	["lucide-file-box"] = "rbxassetid://10723355989",
+	["lucide-file-check"] = "rbxassetid://10723356210",
+	["lucide-file-check-2"] = "rbxassetid://10723356100",
+	["lucide-file-clock"] = "rbxassetid://10723356329",
+	["lucide-file-code"] = "rbxassetid://10723356507",
+	["lucide-file-cog"] = "rbxassetid://10723356830",
+	["lucide-file-cog-2"] = "rbxassetid://10723356676",
+	["lucide-file-diff"] = "rbxassetid://10723357039",
+	["lucide-file-digit"] = "rbxassetid://10723357151",
+	["lucide-file-down"] = "rbxassetid://10723357322",
+	["lucide-file-edit"] = "rbxassetid://10723357495",
+	["lucide-file-heart"] = "rbxassetid://10723357637",
+	["lucide-file-image"] = "rbxassetid://10723357790",
+	["lucide-file-input"] = "rbxassetid://10723357933",
+	["lucide-file-json"] = "rbxassetid://10723364435",
+	["lucide-file-json-2"] = "rbxassetid://10723364361",
+	["lucide-file-key"] = "rbxassetid://10723364605",
+	["lucide-file-key-2"] = "rbxassetid://10723364515",
+	["lucide-file-line-chart"] = "rbxassetid://10723364725",
+	["lucide-file-lock"] = "rbxassetid://10723364957",
+	["lucide-file-lock-2"] = "rbxassetid://10723364861",
+	["lucide-file-minus"] = "rbxassetid://10723365254",
+	["lucide-file-minus-2"] = "rbxassetid://10723365086",
+	["lucide-file-output"] = "rbxassetid://10723365457",
+	["lucide-file-pie-chart"] = "rbxassetid://10723365598",
+	["lucide-file-plus"] = "rbxassetid://10723365877",
+	["lucide-file-plus-2"] = "rbxassetid://10723365766",
+	["lucide-file-question"] = "rbxassetid://10723365987",
+	["lucide-file-scan"] = "rbxassetid://10723366167",
+	["lucide-file-search"] = "rbxassetid://10723366550",
+	["lucide-file-search-2"] = "rbxassetid://10723366340",
+	["lucide-file-signature"] = "rbxassetid://10723366741",
+	["lucide-file-spreadsheet"] = "rbxassetid://10723366962",
+	["lucide-file-symlink"] = "rbxassetid://10723367098",
+	["lucide-file-terminal"] = "rbxassetid://10723367244",
+	["lucide-file-text"] = "rbxassetid://10723367380",
+	["lucide-file-type"] = "rbxassetid://10723367606",
+	["lucide-file-type-2"] = "rbxassetid://10723367509",
+	["lucide-file-up"] = "rbxassetid://10723367734",
+	["lucide-file-video"] = "rbxassetid://10723373884",
+	["lucide-file-video-2"] = "rbxassetid://10723367834",
+	["lucide-file-volume"] = "rbxassetid://10723374172",
+	["lucide-file-volume-2"] = "rbxassetid://10723374030",
+	["lucide-file-warning"] = "rbxassetid://10723374276",
+	["lucide-file-x"] = "rbxassetid://10723374544",
+	["lucide-file-x-2"] = "rbxassetid://10723374378",
+	["lucide-files"] = "rbxassetid://10723374759",
+	["lucide-film"] = "rbxassetid://10723374981",
+	["lucide-filter"] = "rbxassetid://10723375128",
+	["lucide-fingerprint"] = "rbxassetid://10723375250",
+	["lucide-flag"] = "rbxassetid://10723375890",
+	["lucide-flag-off"] = "rbxassetid://10723375443",
+	["lucide-flag-triangle-left"] = "rbxassetid://10723375608",
+	["lucide-flag-triangle-right"] = "rbxassetid://10723375727",
+	["lucide-flame"] = "rbxassetid://10723376114",
+	["lucide-flashlight"] = "rbxassetid://10723376471",
+	["lucide-flashlight-off"] = "rbxassetid://10723376365",
+	["lucide-flask-conical"] = "rbxassetid://10734883986",
+	["lucide-flask-round"] = "rbxassetid://10723376614",
+	["lucide-flip-horizontal"] = "rbxassetid://10723376884",
+	["lucide-flip-horizontal-2"] = "rbxassetid://10723376745",
+	["lucide-flip-vertical"] = "rbxassetid://10723377138",
+	["lucide-flip-vertical-2"] = "rbxassetid://10723377026",
+	["lucide-flower"] = "rbxassetid://10747830374",
+	["lucide-flower-2"] = "rbxassetid://10723377305",
+	["lucide-focus"] = "rbxassetid://10723377537",
+	["lucide-folder"] = "rbxassetid://10723387563",
+	["lucide-folder-archive"] = "rbxassetid://10723384478",
+	["lucide-folder-check"] = "rbxassetid://10723384605",
+	["lucide-folder-clock"] = "rbxassetid://10723384731",
+	["lucide-folder-closed"] = "rbxassetid://10723384893",
+	["lucide-folder-cog"] = "rbxassetid://10723385213",
+	["lucide-folder-cog-2"] = "rbxassetid://10723385036",
+	["lucide-folder-down"] = "rbxassetid://10723385338",
+	["lucide-folder-edit"] = "rbxassetid://10723385445",
+	["lucide-folder-heart"] = "rbxassetid://10723385545",
+	["lucide-folder-input"] = "rbxassetid://10723385721",
+	["lucide-folder-key"] = "rbxassetid://10723385848",
+	["lucide-folder-lock"] = "rbxassetid://10723386005",
+	["lucide-folder-minus"] = "rbxassetid://10723386127",
+	["lucide-folder-open"] = "rbxassetid://10723386277",
+	["lucide-folder-output"] = "rbxassetid://10723386386",
+	["lucide-folder-plus"] = "rbxassetid://10723386531",
+	["lucide-folder-search"] = "rbxassetid://10723386787",
+	["lucide-folder-search-2"] = "rbxassetid://10723386674",
+	["lucide-folder-symlink"] = "rbxassetid://10723386930",
+	["lucide-folder-tree"] = "rbxassetid://10723387085",
+	["lucide-folder-up"] = "rbxassetid://10723387265",
+	["lucide-folder-x"] = "rbxassetid://10723387448",
+	["lucide-folders"] = "rbxassetid://10723387721",
+	["lucide-form-input"] = "rbxassetid://10723387841",
+	["lucide-forward"] = "rbxassetid://10723388016",
+	["lucide-frame"] = "rbxassetid://10723394389",
+	["lucide-framer"] = "rbxassetid://10723394565",
+	["lucide-frown"] = "rbxassetid://10723394681",
+	["lucide-fuel"] = "rbxassetid://10723394846",
+	["lucide-function-square"] = "rbxassetid://10723395041",
+	["lucide-gamepad"] = "rbxassetid://10723395457",
+	["lucide-gamepad-2"] = "rbxassetid://10723395215",
+	["lucide-gauge"] = "rbxassetid://10723395708",
+	["lucide-gavel"] = "rbxassetid://10723395896",
+	["lucide-gem"] = "rbxassetid://10723396000",
+	["lucide-ghost"] = "rbxassetid://10723396107",
+	["lucide-gift"] = "rbxassetid://10723396402",
+	["lucide-gift-card"] = "rbxassetid://10723396225",
+	["lucide-git-branch"] = "rbxassetid://10723396676",
+	["lucide-git-branch-plus"] = "rbxassetid://10723396542",
+	["lucide-git-commit"] = "rbxassetid://10723396812",
+	["lucide-git-compare"] = "rbxassetid://10723396954",
+	["lucide-git-fork"] = "rbxassetid://10723397049",
+	["lucide-git-merge"] = "rbxassetid://10723397165",
+	["lucide-git-pull-request"] = "rbxassetid://10723397431",
+	["lucide-git-pull-request-closed"] = "rbxassetid://10723397268",
+	["lucide-git-pull-request-draft"] = "rbxassetid://10734884302",
+	["lucide-glass"] = "rbxassetid://10723397788",
+	["lucide-glass-2"] = "rbxassetid://10723397529",
+	["lucide-glass-water"] = "rbxassetid://10723397678",
+	["lucide-glasses"] = "rbxassetid://10723397895",
+	["lucide-globe"] = "rbxassetid://10723404337",
+	["lucide-globe-2"] = "rbxassetid://10723398002",
+	["lucide-grab"] = "rbxassetid://10723404472",
+	["lucide-graduation-cap"] = "rbxassetid://10723404691",
+	["lucide-grape"] = "rbxassetid://10723404822",
+	["lucide-grid"] = "rbxassetid://10723404936",
+	["lucide-grip-horizontal"] = "rbxassetid://10723405089",
+	["lucide-grip-vertical"] = "rbxassetid://10723405236",
+	["lucide-hammer"] = "rbxassetid://10723405360",
+	["lucide-hand"] = "rbxassetid://10723405649",
+	["lucide-hand-metal"] = "rbxassetid://10723405508",
+	["lucide-hard-drive"] = "rbxassetid://10723405749",
+	["lucide-hard-hat"] = "rbxassetid://10723405859",
+	["lucide-hash"] = "rbxassetid://10723405975",
+	["lucide-haze"] = "rbxassetid://10723406078",
+	["lucide-headphones"] = "rbxassetid://10723406165",
+	["lucide-heart"] = "rbxassetid://10723406885",
+	["lucide-heart-crack"] = "rbxassetid://10723406299",
+	["lucide-heart-handshake"] = "rbxassetid://10723406480",
+	["lucide-heart-off"] = "rbxassetid://10723406662",
+	["lucide-heart-pulse"] = "rbxassetid://10723406795",
+	["lucide-help-circle"] = "rbxassetid://10723406988",
+	["lucide-hexagon"] = "rbxassetid://10723407092",
+	["lucide-highlighter"] = "rbxassetid://10723407192",
+	["lucide-history"] = "rbxassetid://10723407335",
+	["lucide-home"] = "rbxassetid://10723407389",
+	["lucide-hourglass"] = "rbxassetid://10723407498",
+	["lucide-ice-cream"] = "rbxassetid://10723414308",
+	["lucide-image"] = "rbxassetid://10723415040",
+	["lucide-image-minus"] = "rbxassetid://10723414487",
+	["lucide-image-off"] = "rbxassetid://10723414677",
+	["lucide-image-plus"] = "rbxassetid://10723414827",
+	["lucide-import"] = "rbxassetid://10723415205",
+	["lucide-inbox"] = "rbxassetid://10723415335",
+	["lucide-indent"] = "rbxassetid://10723415494",
+	["lucide-indian-rupee"] = "rbxassetid://10723415642",
+	["lucide-infinity"] = "rbxassetid://10723415766",
+	["lucide-info"] = "rbxassetid://10723415903",
+	["lucide-inspect"] = "rbxassetid://10723416057",
+	["lucide-italic"] = "rbxassetid://10723416195",
+	["lucide-japanese-yen"] = "rbxassetid://10723416363",
+	["lucide-joystick"] = "rbxassetid://10723416527",
+	["lucide-key"] = "rbxassetid://10723416652",
+	["lucide-keyboard"] = "rbxassetid://10723416765",
+	["lucide-lamp"] = "rbxassetid://10723417513",
+	["lucide-lamp-ceiling"] = "rbxassetid://10723416922",
+	["lucide-lamp-desk"] = "rbxassetid://10723417016",
+	["lucide-lamp-floor"] = "rbxassetid://10723417131",
+	["lucide-lamp-wall-down"] = "rbxassetid://10723417240",
+	["lucide-lamp-wall-up"] = "rbxassetid://10723417356",
+	["lucide-landmark"] = "rbxassetid://10723417608",
+	["lucide-languages"] = "rbxassetid://10723417703",
+	["lucide-laptop"] = "rbxassetid://10723423881",
+	["lucide-laptop-2"] = "rbxassetid://10723417797",
+	["lucide-lasso"] = "rbxassetid://10723424235",
+	["lucide-lasso-select"] = "rbxassetid://10723424058",
+	["lucide-laugh"] = "rbxassetid://10723424372",
+	["lucide-layers"] = "rbxassetid://10723424505",
+	["lucide-layout"] = "rbxassetid://10723425376",
+	["lucide-layout-dashboard"] = "rbxassetid://10723424646",
+	["lucide-layout-grid"] = "rbxassetid://10723424838",
+	["lucide-layout-list"] = "rbxassetid://10723424963",
+	["lucide-layout-template"] = "rbxassetid://10723425187",
+	["lucide-leaf"] = "rbxassetid://10723425539",
+	["lucide-library"] = "rbxassetid://10723425615",
+	["lucide-life-buoy"] = "rbxassetid://10723425685",
+	["lucide-lightbulb"] = "rbxassetid://10723425852",
+	["lucide-lightbulb-off"] = "rbxassetid://10723425762",
+	["lucide-line-chart"] = "rbxassetid://10723426393",
+	["lucide-link"] = "rbxassetid://10723426722",
+	["lucide-link-2"] = "rbxassetid://10723426595",
+	["lucide-link-2-off"] = "rbxassetid://10723426513",
+	["lucide-list"] = "rbxassetid://10723433811",
+	["lucide-list-checks"] = "rbxassetid://10734884548",
+	["lucide-list-end"] = "rbxassetid://10723426886",
+	["lucide-list-minus"] = "rbxassetid://10723426986",
+	["lucide-list-music"] = "rbxassetid://10723427081",
+	["lucide-list-ordered"] = "rbxassetid://10723427199",
+	["lucide-list-plus"] = "rbxassetid://10723427334",
+	["lucide-list-start"] = "rbxassetid://10723427494",
+	["lucide-list-video"] = "rbxassetid://10723427619",
+	["lucide-list-x"] = "rbxassetid://10723433655",
+	["lucide-loader"] = "rbxassetid://10723434070",
+	["lucide-loader-2"] = "rbxassetid://10723433935",
+	["lucide-locate"] = "rbxassetid://10723434557",
+	["lucide-locate-fixed"] = "rbxassetid://10723434236",
+	["lucide-locate-off"] = "rbxassetid://10723434379",
+	["lucide-lock"] = "rbxassetid://10723434711",
+	["lucide-log-in"] = "rbxassetid://10723434830",
+	["lucide-log-out"] = "rbxassetid://10723434906",
+	["lucide-luggage"] = "rbxassetid://10723434993",
+	["lucide-magnet"] = "rbxassetid://10723435069",
+	["lucide-mail"] = "rbxassetid://10734885430",
+	["lucide-mail-check"] = "rbxassetid://10723435182",
+	["lucide-mail-minus"] = "rbxassetid://10723435261",
+	["lucide-mail-open"] = "rbxassetid://10723435342",
+	["lucide-mail-plus"] = "rbxassetid://10723435443",
+	["lucide-mail-question"] = "rbxassetid://10723435515",
+	["lucide-mail-search"] = "rbxassetid://10734884739",
+	["lucide-mail-warning"] = "rbxassetid://10734885015",
+	["lucide-mail-x"] = "rbxassetid://10734885247",
+	["lucide-mails"] = "rbxassetid://10734885614",
+	["lucide-map"] = "rbxassetid://10734886202",
+	["lucide-map-pin"] = "rbxassetid://10734886004",
+	["lucide-map-pin-off"] = "rbxassetid://10734885803",
+	["lucide-maximize"] = "rbxassetid://10734886735",
+	["lucide-maximize-2"] = "rbxassetid://10734886496",
+	["lucide-medal"] = "rbxassetid://10734887072",
+	["lucide-megaphone"] = "rbxassetid://10734887454",
+	["lucide-megaphone-off"] = "rbxassetid://10734887311",
+	["lucide-meh"] = "rbxassetid://10734887603",
+	["lucide-menu"] = "rbxassetid://10734887784",
+	["lucide-message-circle"] = "rbxassetid://10734888000",
+	["lucide-message-square"] = "rbxassetid://10734888228",
+	["lucide-mic"] = "rbxassetid://10734888864",
+	["lucide-mic-2"] = "rbxassetid://10734888430",
+	["lucide-mic-off"] = "rbxassetid://10734888646",
+	["lucide-microscope"] = "rbxassetid://10734889106",
+	["lucide-microwave"] = "rbxassetid://10734895076",
+	["lucide-milestone"] = "rbxassetid://10734895310",
+	["lucide-minimize"] = "rbxassetid://10734895698",
+	["lucide-minimize-2"] = "rbxassetid://10734895530",
+	["lucide-minus"] = "rbxassetid://10734896206",
+	["lucide-minus-circle"] = "rbxassetid://10734895856",
+	["lucide-minus-square"] = "rbxassetid://10734896029",
+	["lucide-monitor"] = "rbxassetid://10734896881",
+	["lucide-monitor-off"] = "rbxassetid://10734896360",
+	["lucide-monitor-speaker"] = "rbxassetid://10734896512",
+	["lucide-moon"] = "rbxassetid://10734897102",
+	["lucide-more-horizontal"] = "rbxassetid://10734897250",
+	["lucide-more-vertical"] = "rbxassetid://10734897387",
+	["lucide-mountain"] = "rbxassetid://10734897956",
+	["lucide-mountain-snow"] = "rbxassetid://10734897665",
+	["lucide-mouse"] = "rbxassetid://10734898592",
+	["lucide-mouse-pointer"] = "rbxassetid://10734898476",
+	["lucide-mouse-pointer-2"] = "rbxassetid://10734898194",
+	["lucide-mouse-pointer-click"] = "rbxassetid://10734898355",
+	["lucide-move"] = "rbxassetid://10734900011",
+	["lucide-move-3d"] = "rbxassetid://10734898756",
+	["lucide-move-diagonal"] = "rbxassetid://10734899164",
+	["lucide-move-diagonal-2"] = "rbxassetid://10734898934",
+	["lucide-move-horizontal"] = "rbxassetid://10734899414",
+	["lucide-move-vertical"] = "rbxassetid://10734899821",
+	["lucide-music"] = "rbxassetid://10734905958",
+	["lucide-music-2"] = "rbxassetid://10734900215",
+	["lucide-music-3"] = "rbxassetid://10734905665",
+	["lucide-music-4"] = "rbxassetid://10734905823",
+	["lucide-navigation"] = "rbxassetid://10734906744",
+	["lucide-navigation-2"] = "rbxassetid://10734906332",
+	["lucide-navigation-2-off"] = "rbxassetid://10734906144",
+	["lucide-navigation-off"] = "rbxassetid://10734906580",
+	["lucide-network"] = "rbxassetid://10734906975",
+	["lucide-newspaper"] = "rbxassetid://10734907168",
+	["lucide-octagon"] = "rbxassetid://10734907361",
+	["lucide-option"] = "rbxassetid://10734907649",
+	["lucide-outdent"] = "rbxassetid://10734907933",
+	["lucide-package"] = "rbxassetid://10734909540",
+	["lucide-package-2"] = "rbxassetid://10734908151",
+	["lucide-package-check"] = "rbxassetid://10734908384",
+	["lucide-package-minus"] = "rbxassetid://10734908626",
+	["lucide-package-open"] = "rbxassetid://10734908793",
+	["lucide-package-plus"] = "rbxassetid://10734909016",
+	["lucide-package-search"] = "rbxassetid://10734909196",
+	["lucide-package-x"] = "rbxassetid://10734909375",
+	["lucide-paint-bucket"] = "rbxassetid://10734909847",
+	["lucide-paintbrush"] = "rbxassetid://10734910187",
+	["lucide-paintbrush-2"] = "rbxassetid://10734910030",
+	["lucide-palette"] = "rbxassetid://10734910430",
+	["lucide-palmtree"] = "rbxassetid://10734910680",
+	["lucide-paperclip"] = "rbxassetid://10734910927",
+	["lucide-party-popper"] = "rbxassetid://10734918735",
+	["lucide-pause"] = "rbxassetid://10734919336",
+	["lucide-pause-circle"] = "rbxassetid://10735024209",
+	["lucide-pause-octagon"] = "rbxassetid://10734919143",
+	["lucide-pen-tool"] = "rbxassetid://10734919503",
+	["lucide-pencil"] = "rbxassetid://10734919691",
+	["lucide-percent"] = "rbxassetid://10734919919",
+	["lucide-person-standing"] = "rbxassetid://10734920149",
+	["lucide-phone"] = "rbxassetid://10734921524",
+	["lucide-phone-call"] = "rbxassetid://10734920305",
+	["lucide-phone-forwarded"] = "rbxassetid://10734920508",
+	["lucide-phone-incoming"] = "rbxassetid://10734920694",
+	["lucide-phone-missed"] = "rbxassetid://10734920845",
+	["lucide-phone-off"] = "rbxassetid://10734921077",
+	["lucide-phone-outgoing"] = "rbxassetid://10734921288",
+	["lucide-pie-chart"] = "rbxassetid://10734921727",
+	["lucide-piggy-bank"] = "rbxassetid://10734921935",
+	["lucide-pin"] = "rbxassetid://10734922324",
+	["lucide-pin-off"] = "rbxassetid://10734922180",
+	["lucide-pipette"] = "rbxassetid://10734922497",
+	["lucide-pizza"] = "rbxassetid://10734922774",
+	["lucide-plane"] = "rbxassetid://10734922971",
+	["lucide-play"] = "rbxassetid://10734923549",
+	["lucide-play-circle"] = "rbxassetid://10734923214",
+	["lucide-plus"] = "rbxassetid://10734924532",
+	["lucide-plus-circle"] = "rbxassetid://10734923868",
+	["lucide-plus-square"] = "rbxassetid://10734924219",
+	["lucide-podcast"] = "rbxassetid://10734929553",
+	["lucide-pointer"] = "rbxassetid://10734929723",
+	["lucide-pound-sterling"] = "rbxassetid://10734929981",
+	["lucide-power"] = "rbxassetid://10734930466",
+	["lucide-power-off"] = "rbxassetid://10734930257",
+	["lucide-printer"] = "rbxassetid://10734930632",
+	["lucide-puzzle"] = "rbxassetid://10734930886",
+	["lucide-quote"] = "rbxassetid://10734931234",
+	["lucide-radio"] = "rbxassetid://10734931596",
+	["lucide-radio-receiver"] = "rbxassetid://10734931402",
+	["lucide-rectangle-horizontal"] = "rbxassetid://10734931777",
+	["lucide-rectangle-vertical"] = "rbxassetid://10734932081",
+	["lucide-recycle"] = "rbxassetid://10734932295",
+	["lucide-redo"] = "rbxassetid://10734932822",
+	["lucide-redo-2"] = "rbxassetid://10734932586",
+	["lucide-refresh-ccw"] = "rbxassetid://10734933056",
+	["lucide-refresh-cw"] = "rbxassetid://10734933222",
+	["lucide-refrigerator"] = "rbxassetid://10734933465",
+	["lucide-regex"] = "rbxassetid://10734933655",
+	["lucide-repeat"] = "rbxassetid://10734933966",
+	["lucide-repeat-1"] = "rbxassetid://10734933826",
+	["lucide-reply"] = "rbxassetid://10734934252",
+	["lucide-reply-all"] = "rbxassetid://10734934132",
+	["lucide-rewind"] = "rbxassetid://10734934347",
+	["lucide-rocket"] = "rbxassetid://10734934585",
+	["lucide-rocking-chair"] = "rbxassetid://10734939942",
+	["lucide-rotate-3d"] = "rbxassetid://10734940107",
+	["lucide-rotate-ccw"] = "rbxassetid://10734940376",
+	["lucide-rotate-cw"] = "rbxassetid://10734940654",
+	["lucide-rss"] = "rbxassetid://10734940825",
+	["lucide-ruler"] = "rbxassetid://10734941018",
+	["lucide-russian-ruble"] = "rbxassetid://10734941199",
+	["lucide-sailboat"] = "rbxassetid://10734941354",
+	["lucide-save"] = "rbxassetid://10734941499",
+	["lucide-scale"] = "rbxassetid://10734941912",
+	["lucide-scale-3d"] = "rbxassetid://10734941739",
+	["lucide-scaling"] = "rbxassetid://10734942072",
+	["lucide-scan"] = "rbxassetid://10734942565",
+	["lucide-scan-face"] = "rbxassetid://10734942198",
+	["lucide-scan-line"] = "rbxassetid://10734942351",
+	["lucide-scissors"] = "rbxassetid://10734942778",
+	["lucide-screen-share"] = "rbxassetid://10734943193",
+	["lucide-screen-share-off"] = "rbxassetid://10734942967",
+	["lucide-scroll"] = "rbxassetid://10734943448",
+	["lucide-search"] = "rbxassetid://10734943674",
+	["lucide-send"] = "rbxassetid://10734943902",
+	["lucide-separator-horizontal"] = "rbxassetid://10734944115",
+	["lucide-separator-vertical"] = "rbxassetid://10734944326",
+	["lucide-server"] = "rbxassetid://10734949856",
+	["lucide-server-cog"] = "rbxassetid://10734944444",
+	["lucide-server-crash"] = "rbxassetid://10734944554",
+	["lucide-server-off"] = "rbxassetid://10734944668",
+	["lucide-settings"] = "rbxassetid://10734950309",
+	["lucide-settings-2"] = "rbxassetid://10734950020",
+	["lucide-share"] = "rbxassetid://10734950813",
+	["lucide-share-2"] = "rbxassetid://10734950553",
+	["lucide-sheet"] = "rbxassetid://10734951038",
+	["lucide-shield"] = "rbxassetid://10734951847",
+	["lucide-shield-alert"] = "rbxassetid://10734951173",
+	["lucide-shield-check"] = "rbxassetid://10734951367",
+	["lucide-shield-close"] = "rbxassetid://10734951535",
+	["lucide-shield-off"] = "rbxassetid://10734951684",
+	["lucide-shirt"] = "rbxassetid://10734952036",
+	["lucide-shopping-bag"] = "rbxassetid://10734952273",
+	["lucide-shopping-cart"] = "rbxassetid://10734952479",
+	["lucide-shovel"] = "rbxassetid://10734952773",
+	["lucide-shower-head"] = "rbxassetid://10734952942",
+	["lucide-shrink"] = "rbxassetid://10734953073",
+	["lucide-shrub"] = "rbxassetid://10734953241",
+	["lucide-shuffle"] = "rbxassetid://10734953451",
+	["lucide-sidebar"] = "rbxassetid://10734954301",
+	["lucide-sidebar-close"] = "rbxassetid://10734953715",
+	["lucide-sidebar-open"] = "rbxassetid://10734954000",
+	["lucide-sigma"] = "rbxassetid://10734954538",
+	["lucide-signal"] = "rbxassetid://10734961133",
+	["lucide-signal-high"] = "rbxassetid://10734954807",
+	["lucide-signal-low"] = "rbxassetid://10734955080",
+	["lucide-signal-medium"] = "rbxassetid://10734955336",
+	["lucide-signal-zero"] = "rbxassetid://10734960878",
+	["lucide-siren"] = "rbxassetid://10734961284",
+	["lucide-skip-back"] = "rbxassetid://10734961526",
+	["lucide-skip-forward"] = "rbxassetid://10734961809",
+	["lucide-skull"] = "rbxassetid://10734962068",
+	["lucide-slack"] = "rbxassetid://10734962339",
+	["lucide-slash"] = "rbxassetid://10734962600",
+	["lucide-slice"] = "rbxassetid://10734963024",
+	["lucide-sliders"] = "rbxassetid://10734963400",
+	["lucide-sliders-horizontal"] = "rbxassetid://10734963191",
+	["lucide-smartphone"] = "rbxassetid://10734963940",
+	["lucide-smartphone-charging"] = "rbxassetid://10734963671",
+	["lucide-smile"] = "rbxassetid://10734964441",
+	["lucide-smile-plus"] = "rbxassetid://10734964188",
+	["lucide-snowflake"] = "rbxassetid://10734964600",
+	["lucide-sofa"] = "rbxassetid://10734964852",
+	["lucide-sort-asc"] = "rbxassetid://10734965115",
+	["lucide-sort-desc"] = "rbxassetid://10734965287",
+	["lucide-speaker"] = "rbxassetid://10734965419",
+	["lucide-sprout"] = "rbxassetid://10734965572",
+	["lucide-square"] = "rbxassetid://10734965702",
+	["lucide-star"] = "rbxassetid://10734966248",
+	["lucide-star-half"] = "rbxassetid://10734965897",
+	["lucide-star-off"] = "rbxassetid://10734966097",
+	["lucide-stethoscope"] = "rbxassetid://10734966384",
+	["lucide-sticker"] = "rbxassetid://10734972234",
+	["lucide-sticky-note"] = "rbxassetid://10734972463",
+	["lucide-stop-circle"] = "rbxassetid://10734972621",
+	["lucide-stretch-horizontal"] = "rbxassetid://10734972862",
+	["lucide-stretch-vertical"] = "rbxassetid://10734973130",
+	["lucide-strikethrough"] = "rbxassetid://10734973290",
+	["lucide-subscript"] = "rbxassetid://10734973457",
+	["lucide-sun"] = "rbxassetid://10734974297",
+	["lucide-sun-dim"] = "rbxassetid://10734973645",
+	["lucide-sun-medium"] = "rbxassetid://10734973778",
+	["lucide-sun-moon"] = "rbxassetid://10734973999",
+	["lucide-sun-snow"] = "rbxassetid://10734974130",
+	["lucide-sunrise"] = "rbxassetid://10734974522",
+	["lucide-sunset"] = "rbxassetid://10734974689",
+	["lucide-superscript"] = "rbxassetid://10734974850",
+	["lucide-swiss-franc"] = "rbxassetid://10734975024",
+	["lucide-switch-camera"] = "rbxassetid://10734975214",
+	["lucide-sword"] = "rbxassetid://10734975486",
+	["lucide-swords"] = "rbxassetid://10734975692",
+	["lucide-syringe"] = "rbxassetid://10734975932",
+	["lucide-table"] = "rbxassetid://10734976230",
+	["lucide-table-2"] = "rbxassetid://10734976097",
+	["lucide-tablet"] = "rbxassetid://10734976394",
+	["lucide-tag"] = "rbxassetid://10734976528",
+	["lucide-tags"] = "rbxassetid://10734976739",
+	["lucide-target"] = "rbxassetid://10734977012",
+	["lucide-tent"] = "rbxassetid://10734981750",
+	["lucide-terminal"] = "rbxassetid://10734982144",
+	["lucide-terminal-square"] = "rbxassetid://10734981995",
+	["lucide-text-cursor"] = "rbxassetid://10734982395",
+	["lucide-text-cursor-input"] = "rbxassetid://10734982297",
+	["lucide-thermometer"] = "rbxassetid://10734983134",
+	["lucide-thermometer-snowflake"] = "rbxassetid://10734982571",
+	["lucide-thermometer-sun"] = "rbxassetid://10734982771",
+	["lucide-thumbs-down"] = "rbxassetid://10734983359",
+	["lucide-thumbs-up"] = "rbxassetid://10734983629",
+	["lucide-ticket"] = "rbxassetid://10734983868",
+	["lucide-timer"] = "rbxassetid://10734984606",
+	["lucide-timer-off"] = "rbxassetid://10734984138",
+	["lucide-timer-reset"] = "rbxassetid://10734984355",
+	["lucide-toggle-left"] = "rbxassetid://10734984834",
+	["lucide-toggle-right"] = "rbxassetid://10734985040",
+	["lucide-tornado"] = "rbxassetid://10734985247",
+	["lucide-toy-brick"] = "rbxassetid://10747361919",
+	["lucide-train"] = "rbxassetid://10747362105",
+	["lucide-trash"] = "rbxassetid://10747362393",
+	["lucide-trash-2"] = "rbxassetid://10747362241",
+	["lucide-tree-deciduous"] = "rbxassetid://10747362534",
+	["lucide-tree-pine"] = "rbxassetid://10747362748",
+	["lucide-trees"] = "rbxassetid://10747363016",
+	["lucide-trending-down"] = "rbxassetid://10747363205",
+	["lucide-trending-up"] = "rbxassetid://10747363465",
+	["lucide-triangle"] = "rbxassetid://10747363621",
+	["lucide-trophy"] = "rbxassetid://10747363809",
+	["lucide-truck"] = "rbxassetid://10747364031",
+	["lucide-tv"] = "rbxassetid://10747364593",
+	["lucide-tv-2"] = "rbxassetid://10747364302",
+	["lucide-type"] = "rbxassetid://10747364761",
+	["lucide-umbrella"] = "rbxassetid://10747364971",
+	["lucide-underline"] = "rbxassetid://10747365191",
+	["lucide-undo"] = "rbxassetid://10747365484",
+	["lucide-undo-2"] = "rbxassetid://10747365359",
+	["lucide-unlink"] = "rbxassetid://10747365771",
+	["lucide-unlink-2"] = "rbxassetid://10747397871",
+	["lucide-unlock"] = "rbxassetid://10747366027",
+	["lucide-upload"] = "rbxassetid://10747366434",
+	["lucide-upload-cloud"] = "rbxassetid://10747366266",
+	["lucide-usb"] = "rbxassetid://10747366606",
+	["lucide-user"] = "rbxassetid://10747373176",
+	["lucide-user-check"] = "rbxassetid://10747371901",
+	["lucide-user-cog"] = "rbxassetid://10747372167",
+	["lucide-user-minus"] = "rbxassetid://10747372346",
+	["lucide-user-plus"] = "rbxassetid://10747372702",
+	["lucide-user-x"] = "rbxassetid://10747372992",
+	["lucide-users"] = "rbxassetid://10747373426",
+	["lucide-utensils"] = "rbxassetid://10747373821",
+	["lucide-utensils-crossed"] = "rbxassetid://10747373629",
+	["lucide-venetian-mask"] = "rbxassetid://10747374003",
+	["lucide-verified"] = "rbxassetid://10747374131",
+	["lucide-vibrate"] = "rbxassetid://10747374489",
+	["lucide-vibrate-off"] = "rbxassetid://10747374269",
+	["lucide-video"] = "rbxassetid://10747374938",
+	["lucide-video-off"] = "rbxassetid://10747374721",
+	["lucide-view"] = "rbxassetid://10747375132",
+	["lucide-voicemail"] = "rbxassetid://10747375281",
+	["lucide-volume"] = "rbxassetid://10747376008",
+	["lucide-volume-1"] = "rbxassetid://10747375450",
+	["lucide-volume-2"] = "rbxassetid://10747375679",
+	["lucide-volume-x"] = "rbxassetid://10747375880",
+	["lucide-wallet"] = "rbxassetid://10747376205",
+	["lucide-wand"] = "rbxassetid://10747376565",
+	["lucide-wand-2"] = "rbxassetid://10747376349",
+	["lucide-watch"] = "rbxassetid://10747376722",
+	["lucide-waves"] = "rbxassetid://10747376931",
+	["lucide-webcam"] = "rbxassetid://10747381992",
+	["lucide-wifi"] = "rbxassetid://10747382504",
+	["lucide-wifi-off"] = "rbxassetid://10747382268",
+	["lucide-wind"] = "rbxassetid://10747382750",
+	["lucide-wrap-text"] = "rbxassetid://10747383065",
+	["lucide-wrench"] = "rbxassetid://10747383470",
+	["lucide-x"] = "rbxassetid://10747384394",
+	["lucide-x-circle"] = "rbxassetid://10747383819",
+	["lucide-x-octagon"] = "rbxassetid://10747384037",
+	["lucide-x-square"] = "rbxassetid://10747384217",
+	["lucide-zoom-in"] = "rbxassetid://10747384552",
 	["lucide-zoom-out"] = "rbxassetid://10747384679",
 };
 
@@ -582,39 +1397,6 @@ Compkiller.FontAwesome = {
 	['magnifying-glass'] = "rbxassetid://74387839235930",
 };
 
-function Compkiller:OptimizeMode(v)
-	Compkiller.PerformanceMode = v;
-end;
-
-function Compkiller:IsStudio()
-	return RunService:IsStudio()	
-end;
-
-function Compkiller:CustomIconHighlight()
-	Compkiller.CustomHighlightMode = true;
-end;
-
-function Compkiller:_SetNilP(Ins: Instance, Visible: boolean)
-    if not Ins then return end
-    
-    Compkiller.WindowsNil = Compkiller.WindowsNil or {}
-    Compkiller.NilFolder = Compkiller.NilFolder or Instance.new("Folder")
-    Compkiller.NilFolder.Parent = game:GetService("CoreGui")
-    
-    if Visible then
-        local originalParent = Compkiller.WindowsNil[Ins]
-        if originalParent and originalParent.Parent then
-            Ins.Parent = originalParent
-        end
-        Compkiller.WindowsNil[Ins] = nil
-    else
-        if not Compkiller.WindowsNil[Ins] then
-            Compkiller.WindowsNil[Ins] = Ins.Parent
-        end
-        Ins.Parent = Compkiller.NilFolder
-    end
-end
-
 function Compkiller:SetAllText(flags : {[string] : string})
 	if not flags then -- reset to default
 		for i,v in next , Compkiller.Flags do
@@ -622,12 +1404,12 @@ function Compkiller:SetAllText(flags : {[string] : string})
 				v:SetText(nil);
 			end;
 		end;
-
+		
 		return;
 	end;
-
+	
 	flags = flags or {};
-
+	
 	for i,v in next , flags do
 		if Compkiller.Flags[i] and Compkiller.Flags[i].SetText then
 			Compkiller.Flags[i]:SetText(v);
@@ -718,7 +1500,7 @@ function Compkiller:GetCalculatePosition(planePos: number, planeNormal: number, 
 end;
 
 function Compkiller:_Blur(element : Frame , WindowRemote) : RBXScriptSignal
-	if Compkiller.SecureMode and not Compkiller.SecurityConfig.BlurEnabled then
+	if Compkiller.SecureMode then
 		return game.Changed:Connect(function() end);
 	end;
 
@@ -889,19 +1671,9 @@ function Compkiller:_AddDragBlacklist(Frame: Frame)
 end;
 
 function Compkiller:_GetWindowFromElement(Element)
-	if Compkiller.WindowsNil[Element] then
-		return Compkiller.WindowsNil[Element];
-	end;
-
 	for i,v : ScreenGui in next , Compkiller.Windows do
 		if v and Element:IsDescendantOf(v) then
 			return v;
-		end;
-	end;
-
-	for Frame,Window in next , Compkiller.WindowsNil do
-		if Element:IsDescendantOf(Frame) or Frame == Element then
-			return Window;
 		end;
 	end;
 end;
@@ -968,7 +1740,7 @@ function Compkiller:Drag(InputFrame: Frame, MoveFrame: Frame, Speed : number)
 	local startPos: UDim2 = nil;
 	local Tween = TweenInfo.new(Speed);
 
-	local updateInput = function(input)
+	local function updateInput(input)
 		local delta = input.Position - dragStart;
 		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
 			startPos.Y.Scale, startPos.Y.Offset + delta.Y);
@@ -1595,10 +2367,6 @@ function Compkiller:_CreateBlock(Signal)
 		BlockText.Text = Text;
 	end;
 
-	function rep:GetText()
-		return BlockText.Text;
-	end;
-
 	function rep:SetTextColor(Color)
 		local oldIndex = table.find(Compkiller.Elements.SwitchColor , BlockText);
 
@@ -1615,12 +2383,6 @@ function Compkiller:_CreateBlock(Signal)
 
 	function rep:SetLine(visible)
 		BlockLine.Visible = visible;
-
-		if not visible then
-			BlockLine.Parent = nil;
-		else
-			BlockLine.Parent = rep.Root;
-		end;
 	end;
 
 	function rep:SetTransparency(num)
@@ -1686,62 +2448,52 @@ Compkiller.Hash = function(str: string)
 end;
 
 function Compkiller:CacheImage(id: string) : string
-    if not Compkiller.SecureMode or not id or not id:byte() or Compkiller.__PRELOADING_ICONS then
-        return id or ""
-    end
-    
-    local ids = string.match(id, "%d+")
-    if not ids then return id end
-    
-    local Hash = Compkiller.Hash(id)
-    local cache_path = string.format("%s/cache-%s.png", Compkiller.CacheDirectory, Hash)
-    
-    if isfile(cache_path) then
-        return (getcustomasset or getsynasset or function() return '' end)(cache_path)
-    end
-    
-    task.spawn(function()
-        pcall(function()
-            local imgSize = Compkiller.SecurityConfig.ImageScale or 150
-            local imagesize = string.format("%sx%s", math.floor(imgSize), math.floor(imgSize))
-            
-            local endpoint = string.format(
-                "https://thumbnails.roblox.com/v1/assets?assetIds=%s&size=%s&format=Png&isCircular=false",
-                ids, imagesize
-            )
-            
-            local success, json = pcall(function()
-                return game:HttpGet(endpoint, true)  -- true = async
-            end)
-            
-            if success then
-                local decoded = HttpService:JSONDecode(json)
-                if decoded and decoded.data and decoded.data[1] and decoded.data[1].imageUrl and decoded.data[1].state == "Completed" then
-                    local imgSuccess, imgData = pcall(function()
-                        return game:HttpGet(decoded.data[1].imageUrl, true)
-                    end)
-                    
-                    if imgSuccess then
-                        writefile(cache_path, imgData)
-                    end
-                end
-            end
-        end)
-    end)
-    
-    return id  
-end
+	if not Compkiller.SecureMode or not id or not id:byte() then
+		return "";
+	end;
 
-function Compkiller:Security(directory: string,Config: SecurityConfig) -- Security Mode
-	directory = directory or "blydinet-cache";
+	assert(Compkiller.SecureMode , "please use Compkiller:Security(< string >) before cache image")
+	assert(Compkiller.CacheDirectory , "please use Compkiller:Security(< string >) before cache image")
+
+	local ids = string.match(id , "%d+");
+
+	local Hash = Compkiller.Hash(id);
+
+	local cache_path = string.format("%s/cache-%s.png" ,Compkiller.CacheDirectory , Hash);
+
+	if isfile(cache_path) then
+		return getcustomasset(cache_path);
+	end;
+
+	local endpoint = string.format("https://thumbnails.roblox.com/v1/assets?assetIds=%s&size=150x150&format=Png&isCircular=false" , ids);
+
+	local json = game:HttpGet(endpoint);
+
+	local JSON_Decode = select(2, pcall(function()
+		return HttpService:JSONDecode(json);
+	end));
+
+	if typeof(JSON_Decode) == "table" and JSON_Decode.data[1] and JSON_Decode.data[1].imageUrl and JSON_Decode.data[1].state == "Completed" then task.wait()
+		local en = JSON_Decode.data[1].imageUrl;
+
+		writefile(cache_path , game:HttpGet(en));
+
+		task.wait();
+
+		return getcustomasset(cache_path);
+	end;
+
+	return "";
+end;
+
+function Compkiller:Security(directory: string) -- Security Mode
+	directory = directory or "Compkiller-Cache";
 
 	if not isfolder(directory) then
 		makefolder(directory);
 	end;
 
 	Compkiller.SecureMode = true;
-
-	Compkiller.SecurityConfig = Config or {};
 
 	Compkiller.CacheDirectory = directory;
 end;
@@ -1941,7 +2693,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	UIStroke_7.Color = Color3.fromRGB(29, 29, 29)
 	UIStroke_7.Parent = ColorOpc
 
-	TransparentImage.Name = Compkiller:_RandomString()
+	TransparentImage.Name = "TransparentImage"
 	TransparentImage.Parent = ColorOpc
 	TransparentImage.BackgroundTransparency = 1.000
 	TransparentImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -2010,16 +2762,6 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 
 	Compkiller:_AddPropertyEvent(ColorPickerWindow,function(v)
 		ColorPickerWindow.Visible = v;
-
-		if Compkiller.PerformanceMode then
-			if ColorPickerWindow.Visible then
-				Compkiller:_SetNilP(ColorPickerWindow , Window);
-			else
-				Compkiller:_SetNilP(ColorPickerWindow , nil);
-			end;
-		else
-			Compkiller:_SetNilP(ColorPickerWindow , Window);
-		end;
 	end)
 
 	local ToggleUI = function(bool)
@@ -2362,674 +3104,6 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	return Args;
 end;
 
-function Compkiller:_DrawKeybinds(Window: ScreenGui)
-	if Compkiller.__KEYBINDS_CACHE then
-		return Compkiller.__KEYBINDS_CACHE;
-	end;
-
-	local Keybinds = Instance.new("Frame")
-	local UICorner = Instance.new("UICorner")
-	local IconFrame = Instance.new("Frame")
-	local UICorner_2 = Instance.new("UICorner")
-	local Frame = Instance.new("Frame")
-	local Icon = Instance.new("ImageLabel")
-	local HeaderFrame = Instance.new("Frame")
-	local HeadLabel = Instance.new("TextLabel")
-	local MainFrame = Instance.new("Frame")
-	local UIListLayout = Instance.new("UIListLayout")
-	local MovingFrame = Instance.new("Frame")
-
-	Keybinds.Name = Compkiller:_RandomString()
-	Keybinds.Parent = Window
-	Keybinds.BackgroundColor3 = Compkiller.Colors.BGDBColor;
-	Keybinds.BackgroundTransparency = 0.025
-	Keybinds.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Keybinds.BorderSizePixel = 0
-	Keybinds.Position = UDim2.new(0,100,0,100)
-	Keybinds.Size = UDim2.new(0, 125, 0, 25)
-	Keybinds.ZIndex = 150
-
-	table.insert(Compkiller.Elements.BGDBColor,{
-		Element = Keybinds,
-		Property = 'BackgroundColor3'
-	});
-
-
-	UICorner.CornerRadius = UDim.new(0, 3)
-	UICorner.Parent = Keybinds
-
-	IconFrame.Name = Compkiller:_RandomString()
-	IconFrame.Parent = Keybinds
-	IconFrame.AnchorPoint = Vector2.new(1, 0.5)
-	IconFrame.BackgroundColor3 = Compkiller.Colors.BGDBColor
-	IconFrame.BackgroundTransparency = 0.300
-	IconFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	IconFrame.BorderSizePixel = 0
-	IconFrame.Position = UDim2.new(0, 5, 0.5, 0)
-	IconFrame.Size = UDim2.new(1, 10, 1, 0)
-	IconFrame.SizeConstraint = Enum.SizeConstraint.RelativeYY
-	IconFrame.ZIndex = 149
-
-	table.insert(Compkiller.Elements.BGDBColor,{
-		Element = IconFrame,
-		Property = 'BackgroundColor3'
-	});
-
-	UICorner_2.CornerRadius = UDim.new(0, 3)
-	UICorner_2.Parent = IconFrame
-
-	Frame.Parent = IconFrame
-	Frame.AnchorPoint = Vector2.new(0, 0.5)
-	Frame.BackgroundColor3 = Compkiller.Colors.Highlight;
-	Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Frame.BorderSizePixel = 0
-	Frame.Position = UDim2.new(1, -5, 0.5, 0)
-	Frame.Size = UDim2.new(0, 2, 1, 0)
-	Frame.ZIndex = 151
-
-	table.insert(Compkiller.Elements.Highlight,{
-		Element = Frame,
-		Property = 'BackgroundColor3'
-	});
-
-	Icon.Name = Compkiller:_RandomString()
-	Icon.Parent = IconFrame
-	Icon.AnchorPoint = Vector2.new(0.5, 0.5)
-	Icon.BackgroundTransparency = 1.000
-	Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Icon.BorderSizePixel = 0
-	Icon.Position = UDim2.new(0.5, -2, 0.5, 0)
-	Icon.Size = UDim2.new(0, 20, 0, 20)
-	Icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
-	Icon.ZIndex = 159
-	Icon.Image = Compkiller:CacheImage("rbxassetid://10723416765");
-
-	HeaderFrame.Name = Compkiller:_RandomString()
-	HeaderFrame.Parent = Keybinds
-	HeaderFrame.AnchorPoint = Vector2.new(0.5, 0)
-	HeaderFrame.BackgroundTransparency = 1.000
-	HeaderFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	HeaderFrame.BorderSizePixel = 0
-	HeaderFrame.ClipsDescendants = true
-	HeaderFrame.Position = UDim2.new(0.5, 0, 0, 0)
-	HeaderFrame.Size = UDim2.new(1, -10, 1, 0)
-	HeaderFrame.ZIndex = 155
-
-	HeadLabel.Name = Compkiller:_RandomString()
-	HeadLabel.Parent = HeaderFrame
-	HeadLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-	HeadLabel.BackgroundTransparency = 1.000
-	HeadLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	HeadLabel.BorderSizePixel = 0
-	HeadLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-	HeadLabel.Size = UDim2.new(1, -10, 1, 0)
-	HeadLabel.ZIndex = 156
-	HeadLabel.Font = Enum.Font.GothamMedium
-	HeadLabel.Text = "Keybinds"
-	HeadLabel.TextColor3 = Compkiller.Colors.SwitchColor
-	HeadLabel.TextSize = 12.000
-
-	table.insert(Compkiller.Elements.SwitchColor,{
-		Element = HeadLabel,
-		Property = 'TextColor3'
-	});
-
-	MainFrame.Name = Compkiller:_RandomString()
-	MainFrame.Parent = Keybinds
-	MainFrame.AnchorPoint = Vector2.new(1, 0)
-	MainFrame.BackgroundTransparency = 1.000
-	MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	MainFrame.BorderSizePixel = 0
-	MainFrame.Position = UDim2.new(1, 0, 1, 5)
-	MainFrame.Size = UDim2.new(1, 30, 1, 3)
-	MainFrame.ZIndex = 156;
-	MainFrame.ClipsDescendants = true;
-
-	UIListLayout.Parent = MainFrame
-	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	UIListLayout.Padding = UDim.new(0, 5)
-
-	MovingFrame.Name = Compkiller:_RandomString()
-	MovingFrame.Parent = Keybinds
-	MovingFrame.AnchorPoint = Vector2.new(1, 0.5)
-	MovingFrame.BackgroundTransparency = 1.000
-	MovingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	MovingFrame.BorderSizePixel = 0
-	MovingFrame.Position = UDim2.new(1, 0, 0.5, 0)
-	MovingFrame.Size = UDim2.new(1, 30, 1, 0)
-
-	Compkiller:Drag(MovingFrame,Keybinds,0.1);
-
-	local Ref = {
-		Root = Keybinds
-	};
-
-	Ref.THREAD = task.spawn(function()
-		while true do task.wait()
-			Compkiller:_Animation(MainFrame,TweenInfo.new(0.4),{
-				Size = UDim2.new(1, 30, 1, UIListLayout.AbsoluteContentSize.Y + 1)
-			});
-
-			if UIListLayout.AbsoluteContentSize.Y > 1 then
-				Compkiller:_Animation(IconFrame,TweenInfo.new(0.25),{
-					BackgroundTransparency = 0.3
-				})
-
-				Compkiller:_Animation(Frame,TweenInfo.new(0.25),{
-					BackgroundTransparency = 0
-				})
-
-				Compkiller:_Animation(HeadLabel,TweenInfo.new(0.25),{
-					TextTransparency = 0
-				})
-
-				Compkiller:_Animation(Icon,TweenInfo.new(0.25),{
-					ImageTransparency = 0
-				});
-
-				local LargF = 100;
-
-				for i,v in next , MainFrame:GetChildren() do
-					if v:GetAttribute('AvgScale') then
-						if v:GetAttribute('AvgScale') > LargF then
-							LargF = v:GetAttribute('AvgScale');
-						end;
-					end;
-				end;
-
-				Compkiller:_Animation(Keybinds,TweenInfo.new(0.25),{
-					BackgroundTransparency = 0.025,
-					Size = UDim2.new(0, LargF, 0, 25)
-				})
-			else
-				Compkiller:_Animation(HeadLabel,TweenInfo.new(0.25),{
-					TextTransparency = 1
-				})
-
-				Compkiller:_Animation(Keybinds,TweenInfo.new(0.25),{
-					BackgroundTransparency = 1
-				})
-
-				Compkiller:_Animation(IconFrame,TweenInfo.new(0.25),{
-					BackgroundTransparency = 1
-				})
-
-				Compkiller:_Animation(Frame,TweenInfo.new(0.25),{
-					BackgroundTransparency = 1
-				})
-
-				Compkiller:_Animation(Icon,TweenInfo.new(0.25),{
-					ImageTransparency = 1
-				});
-			end;
-
-			Keybinds.Visible = (Keybinds.BackgroundTransparency < 0.9 and true) or false;
-
-			if Compkiller.PerformanceMode then
-				if Keybinds.Visible then
-					Compkiller:_SetNilP(Keybinds , Window);
-				else
-					Compkiller:_SetNilP(Keybinds , nil);
-				end;
-			else
-				Compkiller:_SetNilP(Keybinds , Window);
-			end;
-		end;
-	end);
-
-	function Ref:AddFrame()
-		local Keyholder = Instance.new("Frame")
-		local UICorner = Instance.new("UICorner")
-		local Label = Instance.new("TextLabel")
-		local Line = Instance.new("Frame")
-		local TypeLabel = Instance.new("TextLabel")
-		local UICorner_2 = Instance.new("UICorner")
-
-		Keyholder.Name = Compkiller:_RandomString()
-		Keyholder.BackgroundColor3 = Compkiller.Colors.BGDBColor
-		Keyholder.BackgroundTransparency = 1
-		Keyholder.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		Keyholder.BorderSizePixel = 0
-		Keyholder.Size = UDim2.new(1, 0, 0, 28)
-		Keyholder.ZIndex = MainFrame.ZIndex + 3
-		Keyholder.ClipsDescendants = true;
-
-		table.insert(Compkiller.Elements.BGDBColor,{
-			Element = Keyholder,
-			Property = 'BackgroundColor3'
-		});
-
-		UICorner.CornerRadius = UDim.new(0, 3)
-		UICorner.Parent = Keyholder
-
-		Label.Name = Compkiller:_RandomString()
-		Label.Parent = Keyholder
-		Label.AnchorPoint = Vector2.new(0.5, 0.5)
-		Label.BackgroundTransparency = 1.000
-		Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		Label.BorderSizePixel = 0
-		Label.Position = UDim2.new(0.5, 0, 0.5, 0)
-		Label.Size = UDim2.new(1, -10, 1, 0)
-		Label.ZIndex = MainFrame.ZIndex + 5;
-		Label.Font = Enum.Font.GothamMedium
-		Label.TextColor3 = Compkiller.Colors.SwitchColor
-		Label.TextSize = 11.000
-		Label.TextTransparency = 1
-		Label.TextXAlignment = Enum.TextXAlignment.Left
-
-		table.insert(Compkiller.Elements.SwitchColor,{
-			Element = Label,
-			Property = 'TextColor3'
-		});
-
-		Line.Name = Compkiller:_RandomString()
-		Line.Parent = Keyholder
-		Line.AnchorPoint = Vector2.new(1, 0.5)
-		Line.BackgroundColor3 = Compkiller.Colors.BGDBColor
-		Line.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		Line.BorderSizePixel = 0
-		Line.Position = UDim2.new(1, 0, 0.5, 0)
-		Line.Size = UDim2.new(0, 30, 1, 0)
-		Line.ZIndex = MainFrame.ZIndex + 4
-
-		table.insert(Compkiller.Elements.BGDBColor,{
-			Element = Line,
-			Property = 'BackgroundColor3'
-		});
-
-		TypeLabel.Name = Compkiller:_RandomString()
-		TypeLabel.Parent = Line
-		TypeLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-		TypeLabel.BackgroundTransparency = 1.000
-		TypeLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		TypeLabel.BorderSizePixel = 0
-		TypeLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-		TypeLabel.Size = UDim2.new(1, 0, 1, 0)
-		TypeLabel.ZIndex = MainFrame.ZIndex + 6
-		TypeLabel.Font = Enum.Font.GothamMedium
-		TypeLabel.TextColor3 = Compkiller.Colors.SwitchColor
-		TypeLabel.TextSize = 11.000
-
-		table.insert(Compkiller.Elements.SwitchColor,{
-			Element = TypeLabel,
-			Property = 'TextColor3'
-		});
-
-		UICorner_2.CornerRadius = UDim.new(0, 3)
-		UICorner_2.Parent = Line
-
-		local UpdateScale = function()
-			local t = TextService:GetTextSize(TypeLabel.Text , TypeLabel.TextSize , TypeLabel.Font , Vector2.new(math.huge,math.huge));
-			local z = TextService:GetTextSize(Label.Text , Label.TextSize , Label.Font , Vector2.new(math.huge,math.huge));
-
-			Line.Size = UDim2.new(0, t.X + 5, 1, 0);
-
-			Keyholder:SetAttribute('AvgScale',(t.X + z.X) + 55);
-		end;
-
-		UpdateScale();
-
-		local frame_ref = {};
-
-		function frame_ref:SetName(str: string)
-			Label.Text = str or Label.Text;
-
-			UpdateScale();
-		end;
-
-		function frame_ref:SetType(str: string)
-			TypeLabel.Text = str or TypeLabel.Text;
-
-			UpdateScale();
-		end;
-
-		function frame_ref:SetVisible(v)
-			if v then
-				Compkiller:_Animation(Keyholder,TweenInfo.new(0.1),{
-					BackgroundTransparency = 0.600,
-					Size = UDim2.new(1, 0, 0, 28)
-				});
-
-				Compkiller:_Animation(Label,TweenInfo.new(0.15),{
-					TextTransparency = 0.100
-				});
-
-				Compkiller:_Animation(Line,TweenInfo.new(0.15),{
-					BackgroundTransparency = 0
-				});
-
-				Compkiller:_Animation(TypeLabel,TweenInfo.new(0.15),{
-					TextTransparency = 0
-				});
-			else
-				Compkiller:_Animation(Keyholder,TweenInfo.new(0.1),{
-					BackgroundTransparency = 1,
-					Size = UDim2.new(1, 0, 0, 0)
-				});
-
-				Compkiller:_Animation(Label,TweenInfo.new(0.15),{
-					TextTransparency = 1
-				});
-
-				Compkiller:_Animation(Line,TweenInfo.new(0.15),{
-					BackgroundTransparency = 1
-				});
-
-				Compkiller:_Animation(TypeLabel,TweenInfo.new(0.15),{
-					TextTransparency = 1
-				});
-			end;
-
-			if Keyholder.BackgroundTransparency <= 0.95 then
-				Keyholder.Parent = MainFrame;
-			else
-				Keyholder.Parent = nil;
-			end;
-
-			UpdateScale();
-		end;
-
-		return frame_ref;
-	end;
-
-	Compkiller.__KEYBINDS_CACHE = Ref;
-
-	return Ref;
-end;
-
-function Compkiller:_KeybindHandler(Parent: Frame , ObjectType: string , ElementAPI: Toggle & Slider , Signal , Zindex: number , ElementCFG: Slider)
-	local Window = Compkiller:_GetWindowFromElement(Parent);
-	local KB_Signal = Compkiller.__SIGNAL(false);
-	local SubIndex = math.random(40,100);
-	local KeybindInd = Compkiller:_DrawKeybinds(Window);
-	local KeybindFrame = KeybindInd:AddFrame();
-
-	local KeybindHandler = Instance.new("Frame")
-	local UIStroke = Instance.new("UIStroke")
-	local UICorner = Instance.new("UICorner")
-	local ElementObjs = Instance.new("Frame")
-	local UIListLayout = Instance.new("UIListLayout")
-
-	KeybindHandler.Name = Compkiller:_RandomString()
-	KeybindHandler.Parent = Window
-	KeybindHandler.BackgroundColor3 = Compkiller.Colors.BlockBackground
-	KeybindHandler.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	KeybindHandler.BorderSizePixel = 0
-	KeybindHandler.ClipsDescendants = true
-	KeybindHandler.Position = UDim2.new(1,999,1,999)
-	KeybindHandler.Size = UDim2.new(0, 225, 0, 0)
-	KeybindHandler.ZIndex = Zindex + SubIndex
-	KeybindHandler.AnchorPoint = Vector2.new(0.5,0)
-
-	table.insert(Compkiller.Elements.BlockBackground,{
-		Element = KeybindHandler,
-		Property = 'BackgroundColor3'
-	});
-
-	UIStroke.Color = Compkiller.Colors.HighStrokeColor
-	UIStroke.Parent = KeybindHandler
-
-	table.insert(Compkiller.Elements.HighStrokeColor,{
-		Element = UIStroke,
-		Property = 'Color'
-	});
-
-	UICorner.CornerRadius = UDim.new(0, 6)
-	UICorner.Parent = KeybindHandler
-
-	ElementObjs.Name = Compkiller:_RandomString()
-	ElementObjs.Parent = KeybindHandler
-	ElementObjs.AnchorPoint = Vector2.new(0.5, 0.5)
-	ElementObjs.BackgroundTransparency = 1.000
-	ElementObjs.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	ElementObjs.BorderSizePixel = 0
-	ElementObjs.Position = UDim2.new(0.5, 0, 0.5, 0)
-	ElementObjs.Size = UDim2.new(1, -5, 1, -5)
-	ElementObjs.ZIndex = Zindex + SubIndex + 10
-
-	UIListLayout.Parent = ElementObjs
-	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-	local refreshPF = function()
-		if Compkiller.PerformanceMode then
-			if KeybindHandler.Size.Y.Offset > 1 then
-				Compkiller:_SetNilP(KeybindHandler , Window);
-			else
-				Compkiller:_SetNilP(KeybindHandler , nil);
-			end;
-		else
-			Compkiller:_SetNilP(KeybindHandler , Window);
-		end;
-	end;
-
-	KeybindHandler:GetPropertyChangedSignal('Size'):Connect(refreshPF);
-
-	task.delay(0.1,refreshPF);
-
-	local ToggleUI = function(bool)
-		if bool then
-			KeybindHandler.Position = UDim2.new(0,Parent.AbsolutePosition.X + 225,0,Parent.AbsolutePosition.Y)
-
-			Compkiller:_Animation(KeybindHandler,TweenInfo.new(0.25),{
-				BackgroundTransparency = 0,
-				Size = UDim2.new(0, 225, 0, UIListLayout.AbsoluteContentSize.Y + 5)
-			});
-
-			Compkiller:_Animation(UIStroke,TweenInfo.new(0.3),{
-				Transparency = 0
-			});
-		else
-			Compkiller:_Animation(KeybindHandler,TweenInfo.new(0.3),{
-				BackgroundTransparency = 1,
-				Size = UDim2.new(0, 225, 0, 0)
-			});
-
-			Compkiller:_Animation(UIStroke,TweenInfo.new(0.3),{
-				Transparency = 1
-			});
-		end;
-	end;
-
-	ToggleUI(false);
-
-	KB_Signal:Connect(ToggleUI);
-
-	local APIRef = {
-		Name = ElementAPI:GetText()
-	};
-
-	local ModeEnum = {
-		[1] = 'Off', -- disabled / off
-		[2] = "Hold",
-		[3] = "Toggle",
-		[4] = "On", -- alway on
-	};
-
-	local e_m = {
-		['Off'] = 1,
-		['Hold'] = 2,
-		['Toggle'] = 3,
-		['On'] = 4,
-	};
-
-	if ObjectType == "Toggle" then
-		APIRef.Off = false;
-		APIRef.On = true;
-		APIRef.Keybind = nil;
-		APIRef.Mode = e_m.Off;
-
-
-	elseif ObjectType == "Number" then
-		APIRef.Off = 1;
-		APIRef.On = 0;
-		APIRef.Keybind = nil;
-		APIRef.Mode = e_m.Off;
-	end;
-
-	local Flag = {};
-
-	APIRef.Update = function()
-		KeybindFrame:SetName(APIRef.Name);
-		KeybindFrame:SetType(ModeEnum[APIRef.Mode]);
-	end
-
-	local ElementAPIs = Compkiller:_LoadElement(ElementObjs , true , KB_Signal , true);
-
-	Flag.Key = ElementAPIs:AddKeybind({
-		Name = "Key",
-		Default = APIRef.Keybind,
-		Callback = function(v)
-			APIRef.Keybind = v;
-		end,
-	});
-
-	Flag.Mode = ElementAPIs:AddDropdown({
-		Name = "Mode",
-		Default = ModeEnum[APIRef.Mode],
-		Values = ModeEnum,
-		Callback = function(v)
-			APIRef.Mode = e_m[v];
-
-			if APIRef.Mode == 4 then
-				ElementAPI:SetValue(APIRef.On);
-			end;
-		end,
-	});
-
-	if ObjectType == "Toggle" then
-		Flag.On = ElementAPIs:AddToggle({
-			Name = "ON Value",
-			Default = APIRef.On,
-			Callback = function(v)
-				APIRef.On = v;
-			end,
-		});
-
-		Flag.Off = ElementAPIs:AddToggle({
-			Name = "OFF Value",
-			Default = APIRef.Off,
-			Callback = function(v)
-				APIRef.Off = v;
-			end,
-		});
-	elseif ObjectType == "Number" then
-		Flag.On = ElementAPIs:AddSlider({
-			Name = "ON Value",
-			Default = APIRef.On,
-			Min = ElementCFG.Min,
-			Round = ElementCFG.Round,
-			Max = ElementCFG.Max,
-			Type = ElementCFG.Type,
-			Callback = function(v)
-				APIRef.On = v;
-			end,
-		});
-
-		Flag.Off = ElementAPIs:AddSlider({
-			Name = "OFF Value",
-			Default = APIRef.Off,
-			Min = ElementCFG.Min,
-			Round = ElementCFG.Round,
-			Max = ElementCFG.Max,
-			Type = ElementCFG.Type,
-			Callback = function(v)
-				APIRef.Off = v;
-			end,
-		});
-	end;
-
-	Flag.ShowInKeybindList = ElementAPIs:AddTextBox({
-		Name = "Name",
-		Default = APIRef.Name,
-		Placeholder = "Keybind Name",
-		Callback = function(v)
-			APIRef.Name = v;
-		end,
-	})
-
-	function APIRef:GetSettings()
-		APIRef.Update();
-
-		return {
-			Key = APIRef.Keybind,
-			On = APIRef.On,
-			Off = APIRef.Off,
-			Mode = APIRef.Mode,
-			Name = APIRef.Name,
-		};
-	end;
-
-	function APIRef:LoadSettings(cfg : KeybindSettings)
-		Flag.ShowInKeybindList:SetValue(cfg.Name);
-		Flag.Off:SetValue(cfg.Off);
-		Flag.On:SetValue(cfg.On);
-		Flag.Mode:SetValue(ModeEnum[cfg.Mode]);
-		Flag.Key:SetValue(cfg.Key);
-
-		APIRef.Update();
-	end;
-
-	APIRef.Thread = task.spawn(function()
-		while true do task.wait(0.01)
-			if APIRef.Mode ~= 1 then
-				if ElementAPI:GetValue() == APIRef.On then
-					KeybindFrame:SetVisible(true);
-				else
-					KeybindFrame:SetVisible(false);
-				end;
-
-				APIRef.Update();
-			else
-				KeybindFrame:SetVisible(false);
-			end;
-		end;
-	end)
-
-	Parent.InputEnded:Connect(function(Input,Typing)
-		if Input.UserInputType == Enum.UserInputType.MouseButton2 and not Typing then
-			KB_Signal:Fire(true);
-		end;
-	end);
-
-	UserInputService.InputBegan:Connect(function(Input)
-		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.MouseButton2 or Input.UserInputType == Enum.UserInputType.Touch then
-			if not Compkiller:_IsMouseOverFrame(Parent) and not Compkiller:_IsMouseOverFrame(KeybindHandler) then
-				KB_Signal:Fire(false);
-			end;
-		end;
-	end);
-
-	UserInputService.InputBegan:Connect(function(Input,Typing)
-		if Input.KeyCode.Name == APIRef.Keybind or Input.KeyCode == APIRef.Keybind or (Input.UserInputType == Enum.UserInputType.MouseButton1 and APIRef.Keybind == "MouseLeft") or (Input.UserInputType == Enum.UserInputType.MouseButton2 and APIRef.Keybind == "MouseRight") then
-
-			if APIRef.Mode == 2 or APIRef.Mode == 4 then
-				ElementAPI:SetValue(APIRef.On);
-			elseif APIRef.Mode == 3 then
-				if ElementAPI:GetValue() == APIRef.On then
-					ElementAPI:SetValue(APIRef.Off);
-				else
-					ElementAPI:SetValue(APIRef.On);
-				end;
-			end;
-		end;
-	end);
-
-	UserInputService.InputEnded:Connect(function(Input,Typing)
-		if Input.KeyCode.Name == APIRef.Keybind or Input.KeyCode == APIRef.Keybind or (Input.UserInputType == Enum.UserInputType.MouseButton1 and APIRef.Keybind == "MouseLeft") or (Input.UserInputType == Enum.UserInputType.MouseButton2 and APIRef.Keybind == "MouseRight") then
-
-			if APIRef.Mode == 2 then
-				ElementAPI:SetValue(APIRef.Off);
-			elseif APIRef.Mode == 4 then
-				ElementAPI:SetValue(APIRef.On);
-			end;
-		end;
-	end);
-
-	return APIRef;
-end;
-
 function Compkiller:_AddPropertyEvent(Target: Frame , Callback: (boolean) -> any)
 	Target:GetPropertyChangedSignal('BackgroundTransparency'):Connect(function()
 		Callback(Target.BackgroundTransparency <= 0.9)
@@ -3130,16 +3204,6 @@ function Compkiller:_LoadOption(Value , TabSignal)
 				Helper.Text.Visible = false;
 			else
 				Helper.Text.Visible = true;
-			end;
-
-			if Compkiller.PerformanceMode then
-				if Helper.Text.Visible then
-					Compkiller:_SetNilP(Helper.Text , Window);
-				else
-					Compkiller:_SetNilP(Helper.Text , nil);
-				end;
-			else
-				Compkiller:_SetNilP(Helper.Text , Window);
 			end;
 		end)
 
@@ -3364,16 +3428,6 @@ function Compkiller:_LoadOption(Value , TabSignal)
 
 		Compkiller:_AddPropertyEvent(ExtractElement,function(bool)
 			ExtractElement.Visible = bool;
-
-			if Compkiller.PerformanceMode then
-				if ExtractElement.Visible then
-					Compkiller:_SetNilP(ExtractElement , Window);
-				else
-					Compkiller:_SetNilP(ExtractElement , nil);
-				end;
-			else
-				Compkiller:_SetNilP(ExtractElement , Window);
-			end;
 		end);
 
 		Compkiller:_AddDragBlacklist(ExtractElement);
@@ -3443,7 +3497,6 @@ end;
 
 function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 	local Window = Compkiller:_GetWindowFromElement(BaseParent);
-
 	local BaseZ_Index = BaseParent.ZIndex + (math.random(1,15) * 100);
 
 	local DropdownWindow = Instance.new("Frame")
@@ -3471,16 +3524,6 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 	Compkiller:_AddDragBlacklist(DropdownWindow);
 	Compkiller:_AddPropertyEvent(DropdownWindow,function(v)
 		DropdownWindow.Visible = v;
-
-		if Compkiller.PerformanceMode then
-			if DropdownWindow.Visible then
-				Compkiller:_SetNilP(DropdownWindow , Window);
-			else
-				Compkiller:_SetNilP(DropdownWindow , nil);
-			end;
-		else
-			Compkiller:_SetNilP(DropdownWindow , Window);
-		end;
 	end)
 
 	UIStroke.Color = Compkiller.Colors.HighStrokeColor
@@ -3790,7 +3833,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 	return Args;
 end;
 
-function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal , DisableStackKeybind)
+function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 	local Zindex = Parent.ZIndex + 1;
 	local Tween = TweenInfo.new(0.25,Enum.EasingStyle.Quint);
 
@@ -3855,23 +3898,13 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 		function Args:GetValue()
 			return Config.Default;
 		end;
-
+		
 		function Args:SetText(str : string)
 			Block:SetText(str or Config.Name);
 		end;
 
-		function Args:GetText()
-			return Block:GetText();
-		end;
-
 		if Config.Flag then
 			Compkiller.Flags[Config.Flag] = Args;
-		end;
-
-		if not DisableStackKeybind then
-			local AutoKeybind = Compkiller:_KeybindHandler(Block.Root , "Toggle" , Args , Signal , Zindex , Config);
-
-			Args.AutoKeybind = AutoKeybind;
 		end;
 
 		return Args;
@@ -3941,15 +3974,11 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 		local Args = {};
 
 		Args.Flag = Config.Flag;
-
+		
 		function Args:SetText(str : string)
 			Block:SetText(str or Config.Name);
 		end;
-
-		function Args:GetText()
-			return Block:GetText();
-		end;
-
+		
 		function Args:SetValue(value)
 			Config.Default = value;
 
@@ -4024,13 +4053,9 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 
 			Config.Callback(value,opc);
 		end;
-
+		
 		function Args:SetText(str : string)
 			Block:SetText(str or Config.Name);
-		end;
-
-		function Args:GetText()
-			return Block:GetText();
 		end;
 
 		Args.Signal = Signal:Connect(function(bool)
@@ -4203,10 +4228,6 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 		function Args:SetText(t)
 			Config.Name = t;
 			TextLabel.Text = Config.Name;
-		end;
-
-		function Args:GetText()
-			return TextLabel.Text;
 		end;
 
 		return Args;
@@ -4460,15 +4481,11 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 
 			Config.Callback(Value);
 		end;
-
+		
 		function Args:SetText(str : string)
 			BlockText.Text = str or Config.Name
 		end;
-
-		function Args:GetText()
-			return BlockText.Text;
-		end;
-
+		
 		Args.Signal = Signal:Connect(function(bool)
 			if bool then
 				Compkiller:_Animation(SliderInput, TweenInfo.new(0.35),{
@@ -4543,12 +4560,6 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 
 		if Config.Flag then
 			Compkiller.Flags[Config.Flag] = Args;
-		end;
-
-		if not DisableStackKeybind then
-			local AutoKeybind = Compkiller:_KeybindHandler(Slider , "Number" , Args , Signal , Zindex , Config);
-
-			Args.AutoKeybind = AutoKeybind;
 		end;
 
 		return Args;
@@ -4823,17 +4834,9 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 
 			local MainScale = ((scale.X > Base.X) and scale.X) or Base.X;
 
-			local xp = pcall(function()
-				Compkiller:_Animation(LinkValues,TweenInfo.new(0.25),{
-					Size = UDim2.fromOffset(math.clamp(MainScale + 7 , Base.X , TextBox.AbsoluteSize.X / 2) , 16)
-				})
-			end);
-
-			if not xp then
-				Compkiller:_Animation(LinkValues,TweenInfo.new(0.25),{
-					Size = UDim2.fromOffset(MainScale + 7 , 16)
-				})
-			end;
+			Compkiller:_Animation(LinkValues,TweenInfo.new(0.25),{
+				Size = UDim2.fromOffset(math.clamp(MainScale + 7 , Base.X , TextBox.AbsoluteSize.X / 2) , 16)
+			})
 		end;
 
 		local parse = function(text)
@@ -4878,15 +4881,11 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 		local Args = {};
 
 		Args.Flag = Config.Flag;
-
+		
 		function Args:SetText(str : string)
 			BlockText.Text = str or Config.Name
 		end;
-
-		function Args:GetText()
-			return BlockText.Text;
-		end;
-
+		
 		function Args:SetValue(Value)
 			Config.Default = Value;
 
@@ -5117,7 +5116,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 		MainButton.Position = UDim2.new(1, -5, 0.5, 0)
 		MainButton.Size = UDim2.new(0, 13, 0, 13)
 		MainButton.ZIndex = Zindex + 5
-		MainButton.Image = Compkiller:CacheImage("rbxassetid://109535175596957")
+		MainButton.Image = Compkiller:CacheImage("rbxassetid://10709790948")
 
 		Compkiller:_Hover(ValueItems,function()
 			Compkiller:_Animation(ValueItems,TweenInfo.new(0.3),{
@@ -5171,14 +5170,9 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal ,
 
 			Config.Callback(Value);
 		end;
-
+		
 		function Args:SetText(str : string)
 			BlockText.Text = str or Config.Name
-		end;
-
-
-		function Args:GetText()
-			return BlockText.Text;
 		end;
 
 		function Args:SetValues(v)
@@ -5581,13 +5575,11 @@ function Compkiller.new(Config : Window)
 	local ExpireText = Instance.new("TextLabel")
 	local TabMainFrame = Instance.new("Frame")
 
-	Compkiller:_DrawKeybinds(CompKiller);
-
 	UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
 		TabButtonScrollingFrame.CanvasSize = UDim2.fromOffset(0,UIListLayout.AbsoluteContentSize.Y)
 	end);
 
-	CompKiller.Name = "u?name=compkiller_?"..Compkiller:_RandomString();
+	CompKiller.Name = "u?name=compkiller_"..Compkiller:_RandomString();
 	CompKiller.Parent = CoreGui;
 	CompKiller.ResetOnSpawn = false
 	CompKiller.IgnoreGuiInset = true;
@@ -5675,16 +5667,7 @@ function Compkiller.new(Config : Window)
 	CompLogo.Position = UDim2.new(0, 9, 0, 7)
 	CompLogo.Size = UDim2.new(0, 45, 0, 45)
 	CompLogo.Image = Config.Logo
-	
-	if Compkiller.CustomHighlightMode then
-		CompLogo.ImageColor3 = Compkiller.Colors.Highlight;
-		
-		table.insert(Compkiller.Elements.Highlight , {
-			Element = CompLogo,
-			Property = 'ImageColor3'
-		});
-	end;
-	
+
 	WindowLabel.Name = Compkiller:_RandomString()
 	WindowLabel.Parent = TabFrame
 	WindowLabel.BackgroundTransparency = 1.000
@@ -5759,7 +5742,7 @@ function Compkiller.new(Config : Window)
 		local Highlight = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
 
-		Highlight.Name = Compkiller:_RandomString()
+		Highlight.Name = "Highlight"
 		Highlight.Parent = Userinfo
 		Highlight.AnchorPoint = Vector2.new(0.5, 0)
 		Highlight.BackgroundColor3 = Color3.fromRGB(161, 161, 161)
@@ -6007,7 +5990,7 @@ function Compkiller.new(Config : Window)
 		local HeaderText = Instance.new("TextLabel")
 		local ImageLabel = Instance.new("ImageLabel")
 
-		UserSettings.Name = Compkiller:_RandomString()
+		UserSettings.Name = "UserSettings"
 		UserSettings.Parent = CompKiller;
 		UserSettings.BackgroundColor3 = Compkiller.Colors.BGDBColor;
 		UserSettings.BackgroundTransparency = 1
@@ -6026,7 +6009,7 @@ function Compkiller.new(Config : Window)
 		UICorner.CornerRadius = UDim.new(0, 4)
 		UICorner.Parent = UserSettings
 
-		SectionFrame.Name = Compkiller:_RandomString()
+		SectionFrame.Name = "SectionFrame"
 		SectionFrame.Parent = UserSettings
 		SectionFrame.BackgroundColor3 = Compkiller.Colors.BGDBColor;
 		SectionFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -6048,7 +6031,7 @@ function Compkiller.new(Config : Window)
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListLayout.Padding = UDim.new(0, 5)
 
-		Header.Name = Compkiller:_RandomString()
+		Header.Name = "Header"
 		Header.Parent = UserSettings
 		Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		Header.BackgroundTransparency = 1.000
@@ -6057,7 +6040,7 @@ function Compkiller.new(Config : Window)
 		Header.Size = UDim2.new(1, 0, 0, 45)
 		Header.ZIndex = 66
 
-		HeaderText.Name = Compkiller:_RandomString()
+		HeaderText.Name = "HeaderText"
 		HeaderText.Parent = Header
 		HeaderText.AnchorPoint = Vector2.new(0.5, 0.5)
 		HeaderText.BackgroundTransparency = 1.000
@@ -6379,16 +6362,6 @@ function Compkiller.new(Config : Window)
 				ContainerTab.Visible = true;
 			else
 				ContainerTab.Visible = false;
-			end;
-
-			if Compkiller.PerformanceMode then
-				if ContainerTab.Visible then
-					Compkiller:_SetNilP(ContainerTab , TabMainFrame);
-				else
-					Compkiller:_SetNilP(ContainerTab , nil);
-				end;
-			else
-				Compkiller:_SetNilP(ContainerTab , TabMainFrame);
 			end;
 		end);
 
@@ -6927,9 +6900,8 @@ function Compkiller.new(Config : Window)
 		SectionClose.Position = UDim2.new(1, -12, 0.5, 0)
 		SectionClose.Size = UDim2.new(0, 17, 0, 17)
 		SectionClose.ZIndex = 10
-		SectionClose.Image = Compkiller:CacheImage("rbxassetid://109535175596957")
+		SectionClose.Image = Compkiller:CacheImage("rbxassetid://10709790948")
 		SectionClose.ImageTransparency = 0.500
-
 
 		ScrollingFrame.Parent = ConfigList
 		ScrollingFrame.Active = true
@@ -7018,7 +6990,7 @@ function Compkiller.new(Config : Window)
 		SectionClose_2.Position = UDim2.new(1, -12, 0.5, 0)
 		SectionClose_2.Size = UDim2.new(0, 17, 0, 17)
 		SectionClose_2.ZIndex = 10
-		SectionClose_2.Image = Compkiller:CacheImage("rbxassetid://109535175596957")
+		SectionClose_2.Image = Compkiller:CacheImage("rbxassetid://10709790948")
 		SectionClose_2.ImageTransparency = 0.500
 
 		Frame.Parent = AddConfig
@@ -7149,17 +7121,6 @@ function Compkiller.new(Config : Window)
 			else
 				TabConfig.Visible = false;
 			end;
-
-			if Compkiller.PerformanceMode then
-				if TabConfig.Visible then
-					Compkiller:_SetNilP(TabConfig , TabMainFrame);
-				else
-					Compkiller:_SetNilP(TabConfig , nil);
-				end;
-			else
-				Compkiller:_SetNilP(TabConfig , TabMainFrame);
-			end;
-
 		end)
 
 		local TabOpen = function(bool)
@@ -7574,7 +7535,7 @@ function Compkiller.new(Config : Window)
 			Icon.Size = UDim2.new(0.699999988, 0, 0.699999988, 0)
 			Icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
 			Icon.ZIndex = 15
-			Icon.Image = Compkiller:CacheImage("rbxassetid://10734941499")
+			Icon.Image = "rbxassetid://10734941499"
 			Icon.ImageTransparency = 1;
 
 			LoadButton.Name = Compkiller:_RandomString()
@@ -8034,16 +7995,6 @@ function Compkiller.new(Config : Window)
 				else
 					TabContent.Visible = false;
 				end;
-
-				if Compkiller.PerformanceMode then
-					if TabContent.Visible then
-						Compkiller:_SetNilP(TabContent , Internal.Parent);
-					else
-						Compkiller:_SetNilP(TabContent , nil);
-					end;
-				else
-					Compkiller:_SetNilP(TabContent , Internal.Parent);
-				end;
 			end);
 
 			Upvalue.Left = Left;
@@ -8060,16 +8011,6 @@ function Compkiller.new(Config : Window)
 				TabContent.Visible = false;
 			else
 				TabContent.Visible = true;
-			end;
-
-			if Compkiller.PerformanceMode then
-				if TabContent.Visible then
-					Compkiller:_SetNilP(TabContent , Internal.Parent);
-				else
-					Compkiller:_SetNilP(TabContent , nil);
-				end;
-			else
-				Compkiller:_SetNilP(TabContent , Internal.Parent);
 			end;
 		else
 			-- Button --
@@ -8237,16 +8178,6 @@ function Compkiller.new(Config : Window)
 					TabContent.Visible = true;
 				else
 					TabContent.Visible = false;
-				end;
-
-				if Compkiller.PerformanceMode then
-					if TabContent.Visible then
-						Compkiller:_SetNilP(TabContent , TabMainFrame);
-					else
-						Compkiller:_SetNilP(TabContent , nil);
-					end;
-				else
-					Compkiller:_SetNilP(TabContent , TabMainFrame);
 				end;
 			end)
 
@@ -8552,7 +8483,7 @@ function Compkiller.new(Config : Window)
 			SectionClose.Position = UDim2.new(1, -12, 0.5, 0)
 			SectionClose.Size = UDim2.new(0, 17, 0, 17)
 			SectionClose.ZIndex = 10
-			SectionClose.Image = Compkiller:CacheImage("rbxassetid://109535175596957")
+			SectionClose.Image = Compkiller:CacheImage("rbxassetid://10709790948")
 			SectionClose.ImageTransparency = 0.500
 
 			if not SectionText.Text:byte() then
@@ -8717,11 +8648,7 @@ function Compkiller.new(Config : Window)
 				end;
 
 				refresh();
-				refreshScale();
-			end);
 
-			task.delay(2.5,function()
-				refresh();
 				refreshScale();
 			end);
 
@@ -8890,15 +8817,6 @@ function Compkiller.new(Config : Window)
 			CompLogo.SizeConstraint = Enum.SizeConstraint.RelativeYY
 			CompLogo.ZIndex = 159
 			CompLogo.Image = Config.Logo
-			
-			if Compkiller.CustomHighlightMode then
-				CompLogo.ImageColor3 = Compkiller.Colors.Highlight;
-
-				table.insert(Compkiller.Elements.Highlight , {
-					Element = CompLogo,
-					Property = 'ImageColor3'
-				});
-			end;
 
 			WaternarkList.Name = Compkiller:_RandomString()
 			WaternarkList.Parent = Watermark
@@ -8992,19 +8910,6 @@ function Compkiller.new(Config : Window)
 				function Arg:Visible(v)
 					Icon.Visible = v;
 					TextLabel.Visible = v;
-
-					if Compkiller.PerformanceMode then
-						if v then
-							Compkiller:_SetNilP(Icon , WaternarkList);
-							Compkiller:_SetNilP(TextLabel , WaternarkList);
-						else
-							Compkiller:_SetNilP(Icon , nil);
-							Compkiller:_SetNilP(TextLabel , nil);
-						end;
-					else
-						Compkiller:_SetNilP(Icon , WaternarkList);
-						Compkiller:_SetNilP(TextLabel , WaternarkList);
-					end;
 				end;
 
 				return Arg;
@@ -9278,19 +9183,16 @@ function Compkiller:GetConfig(Type: string)
 				Flag = v.Flag,
 				Value = Suf,
 				Functions = v,
-				AutoKeybind = (v.AutoKeybind and v.AutoKeybind:GetSettings());
 			}
 		elseif Type == "MK" then
 			ConfigFlags[v.Flag] = {
 				Flag = v.Flag,
 				Value = Suf,
-				AutoKeybind = (v.AutoKeybind and v.AutoKeybind:GetSettings());
 			}
 		else
 			table.insert(ConfigFlags , {
 				Flag = v.Flag,
-				Value = Suf,
-				AutoKeybind = (v.AutoKeybind and v.AutoKeybind:GetSettings());
+				Value = Suf
 			})
 		end;
 	end;
@@ -9480,12 +9382,6 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 							local Transparency = v.Value.Transparency;
 
 							Value.Functions:SetValue(Color , Transparency);
-						end;
-
-						if Value.Functions.AutoKeybind then
-							if v.AutoKeybind then
-								Value.Functions.AutoKeybind:LoadSettings(v.AutoKeybind)
-							end;
 						end;
 					end;
 				end
@@ -9696,10 +9592,6 @@ function Compkiller.newNotify()
 				CompLogo.Image = Compkiller:_GetIcon(Notify.Icon);
 			end;
 
-			if Compkiller.CustomHighlightMode then
-				CompLogo.ImageColor3 = Compkiller.Colors.Highlight;
-			end;
-			
 			Header.Name = Compkiller:_RandomString()
 			Header.Parent = NotifyFrame
 			Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -9853,7 +9745,5 @@ function Compkiller.newNotify()
 
 	return Compkiller.NOTIFY_CACHE;
 end;
-
-Compkiller.NilFolder.Name = "Nil-Instances";
 
 return Compkiller;
