@@ -2587,7 +2587,7 @@ function Compkiller:Security(directory: string,Config: SecurityConfig) -- Securi
 		makefolder(directory);
 	end;
 
-	Compkiller.SecureMode = false;
+	Compkiller.SecureMode = true;
 
 	Compkiller.SecurityConfig = Config or {};
 
