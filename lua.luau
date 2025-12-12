@@ -5290,7 +5290,7 @@ function Compkiller:SetTheme(name)
 			["StrokeColor"] = Color3.new(0, 0.119857, 0.248276),
 			["SwitchColor"] = Color3.new(1, 1, 1),
 			["Toggle"] = Color3.new(0.054902, 0.463935, 0.835294),
-		},
+		};
 	elseif name == "Purple Rose" then
 		Compkiller.Colors = {
 			["BGDBColor"] = Color3.new(0.0459068, 0.030321, 0.117241),
@@ -5305,7 +5305,7 @@ function Compkiller:SetTheme(name)
 			["StrokeColor"] = Color3.new(0.148499, 0.137836, 0.248276),
 			["SwitchColor"] = Color3.new(1, 1, 1),
 			["Toggle"] = Color3.new(0.835294, 0.054902, 0.248654),
-		},
+		};
 	elseif name == "Neon Pink" then
     Compkiller.Colors = {
         ["BGDBColor"] = Color3.fromRGB(15, 8, 18),
@@ -5320,7 +5320,7 @@ function Compkiller:SetTheme(name)
         ["StrokeColor"] = Color3.fromRGB(40, 22, 47),
         ["SwitchColor"] = Color3.fromRGB(255, 240, 245),
         ["Toggle"] = Color3.fromRGB(219, 112, 147), 
-    },
+    };
 	elseif name == "Purple Magic" then
     Compkiller.Colors = {
         ["BGDBColor"] = Color3.fromRGB(13, 5, 23),
