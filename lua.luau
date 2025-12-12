@@ -5335,7 +5335,7 @@ function Compkiller:SetTheme(name)
         ["StrokeColor"] = Color3.fromRGB(35, 18, 55),
         ["SwitchColor"] = Color3.fromRGB(240, 230, 255),
         ["Toggle"] = Color3.fromRGB(138, 43, 226), 
-    },
+    };
 	elseif name == "Pastel Pink" then
     Compkiller.Colors = {
         ["BGDBColor"] = Color3.fromRGB(30, 20, 28),
@@ -5350,7 +5350,7 @@ function Compkiller:SetTheme(name)
         ["StrokeColor"] = Color3.fromRGB(50, 35, 47),
         ["SwitchColor"] = Color3.fromRGB(255, 250, 250),
         ["Toggle"] = Color3.fromRGB(219, 112, 147), 
-    },
+    };
 	elseif name == "Purple Gradient" then
     Compkiller.Colors = {
         ["BGDBColor"] = Color3.fromRGB(18, 8, 28),
@@ -5365,7 +5365,7 @@ function Compkiller:SetTheme(name)
         ["StrokeColor"] = Color3.fromRGB(40, 18, 60),
         ["SwitchColor"] = Color3.fromRGB(245, 235, 255),
         ["Toggle"] = Color3.fromRGB(153, 50, 204), 
-    },
+    };
 elseif name == "Dark Purple" then
     Compkiller.Colors = {
         ["BGDBColor"] = Color3.fromRGB(10, 5, 15),
@@ -5380,7 +5380,7 @@ elseif name == "Dark Purple" then
         ["StrokeColor"] = Color3.fromRGB(30, 18, 35),
         ["SwitchColor"] = Color3.fromRGB(230, 220, 240),
         ["Toggle"] = Color3.fromRGB(75, 0, 130), 
-    },
+    };
 elseif name == "Cosmic Purple" then
     Compkiller.Colors = {
         ["BGDBColor"] = Color3.fromRGB(8, 3, 15),
@@ -5395,7 +5395,7 @@ elseif name == "Cosmic Purple" then
         ["StrokeColor"] = Color3.fromRGB(22, 10, 35),
         ["SwitchColor"] = Color3.fromRGB(230, 220, 245),
         ["Toggle"] = Color3.fromRGB(106, 13, 173),
-    },
+    };
 	elseif name == "Skeet" then		
 		Compkiller.Colors = {
 			["BGDBColor"] = Color3.new(0.114578, 0.125191, 0.151724),
