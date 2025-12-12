@@ -56,7 +56,7 @@ export type KeybindSettings = {
 	Name : string,
 }
 
-export type SecurityConfig = {
+export type Config = {
 	BlurEnabled : boolean,
 	ImageScale: number,
 };
@@ -2587,7 +2587,7 @@ function Compkiller:Security(directory: string,Config: SecurityConfig) -- Securi
 		makefolder(directory);
 	end;
 
-	Compkiller.SecureMode = true;
+	Compkiller.SecureMode = false;
 
 	Compkiller.SecurityConfig = Config or {};
 
