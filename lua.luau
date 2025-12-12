@@ -2585,7 +2585,7 @@ function Compkiller:PreloadIcons()
 end;
 
 function Compkiller:Security(directory: string,Config: SecurityConfig) -- Security Mode
-	directory = directory or "Compkiller-Cache";
+	directory = directory or "blydinet-cache";
 
 	if not isfolder(directory) then
 		makefolder(directory);
