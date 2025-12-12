@@ -1415,18 +1415,26 @@ function Compkiller:CustomIconHighlight()
 	Compkiller.CustomHighlightMode = true;
 end;
 
-function Compkiller:_SetNilP(Ins: Instance , Parent: Instance)
-	Compkiller.WindowsNil = Compkiller.WindowsNil or {};
-	Compkiller.NilFolder = Compkiller.NilFolder or Instance.new('Folder');
-
-	if not Compkiller.WindowsNil[Ins] then
-		local win = Compkiller:_GetWindowFromElement(Ins);
-
-		Compkiller.WindowsNil[Ins] = win;
-	end;
-
-	Ins.Parent = Parent or Compkiller.NilFolder;
-end;
+function Compkiller:_SetNilP(Ins: Instance, Visible: boolean)
+    if not Ins then return end
+    
+    Compkiller.WindowsNil = Compkiller.WindowsNil or {}
+    Compkiller.NilFolder = Compkiller.NilFolder or Instance.new("Folder")
+    Compkiller.NilFolder.Parent = game:GetService("CoreGui")
+    
+    if Visible then
+        local originalParent = Compkiller.WindowsNil[Ins]
+        if originalParent and originalParent.Parent then
+            Ins.Parent = originalParent
+        end
+        Compkiller.WindowsNil[Ins] = nil
+    else
+        if not Compkiller.WindowsNil[Ins] then
+            Compkiller.WindowsNil[Ins] = Ins.Parent
+        end
+        Ins.Parent = Compkiller.NilFolder
+    end
+end
 
 function Compkiller:SetAllText(flags : {[string] : string})
 	if not flags then -- reset to default
@@ -2499,90 +2507,78 @@ Compkiller.Hash = function(str: string)
 end;
 
 function Compkiller:CacheImage(id: string) : string
-	if not Compkiller.SecureMode or not id or not id:byte() then
-		return id or "";
-	end;
-
-	assert(Compkiller.SecureMode , "please use Compkiller:Security(< string >) before cache image")
-	assert(Compkiller.CacheDirectory , "please use Compkiller:Security(< string >) before cache image")
-
-	local ids = string.match(id , "%d+");
-
-	if ids == nil then
-		return id;
-	end;
-
-	local Hash = Compkiller.Hash(id);
-
-	local cache_path = string.format("%s/cache-%s.png" ,Compkiller.CacheDirectory , Hash);
-
-	if isfile(cache_path) then
-		return (getcustomasset or getsynasset or function() return ''; end)(cache_path);
-	end;
-
-	local imgSize = Compkiller.SecurityConfig.ImageScale;
-
-	local imagesize = (imgSize and string.format("%sx%s", tostring(math.round(imgSize)), tostring(math.round(imgSize)))) or "150x150"
-
-	if imagesize == nil then
-		return ''
-	end;
-
-	local endpoint = string.format(
-		"https://thumbnails.roblox.com/v1/assets?assetIds=%s&size=%s&format=Png&isCircular=false",
-		ids,
-		imagesize
-	);
-
-	local json = game:HttpGet(endpoint);
-
-	local JSON_Decode = select(2, pcall(function()
-		return HttpService:JSONDecode(json);
-	end));
-
-	if typeof(JSON_Decode) == "table" and JSON_Decode and JSON_Decode.data and JSON_Decode.data[1] and JSON_Decode.data[1].imageUrl and JSON_Decode.data[1].state == "Completed" then task.wait()
-		local en = JSON_Decode.data[1].imageUrl;
-
-		writefile(cache_path , game:HttpGet(en));
-
-		task.wait();
-
-		return (getcustomasset or getsynasset or function() return ''; end)(cache_path);
-	end;
-
-	return "";
-end;
+    if not Compkiller.SecureMode or not id or not id:byte() or Compkiller.__PRELOADING_ICONS then
+        return id or ""
+    end
+    
+    local ids = string.match(id, "%d+")
+    if not ids then return id end
+    
+    local Hash = Compkiller.Hash(id)
+    local cache_path = string.format("%s/cache-%s.png", Compkiller.CacheDirectory, Hash)
+    
+    if isfile(cache_path) then
+        return (getcustomasset or getsynasset or function() return '' end)(cache_path)
+    end
+    
+    task.spawn(function()
+        pcall(function()
+            local imgSize = Compkiller.SecurityConfig.ImageScale or 150
+            local imagesize = string.format("%sx%s", math.floor(imgSize), math.floor(imgSize))
+            
+            local endpoint = string.format(
+                "https://thumbnails.roblox.com/v1/assets?assetIds=%s&size=%s&format=Png&isCircular=false",
+                ids, imagesize
+            )
+            
+            local success, json = pcall(function()
+                return game:HttpGet(endpoint, true)  -- true = async
+            end)
+            
+            if success then
+                local decoded = HttpService:JSONDecode(json)
+                if decoded and decoded.data and decoded.data[1] and decoded.data[1].imageUrl and decoded.data[1].state == "Completed" then
+                    local imgSuccess, imgData = pcall(function()
+                        return game:HttpGet(decoded.data[1].imageUrl, true)
+                    end)
+                    
+                    if imgSuccess then
+                        writefile(cache_path, imgData)
+                    end
+                end
+            end
+        end)
+    end)
+    
+    return id  
+end
 
 function Compkiller:PreloadIcons()
-	local RequiredAssets = {
-		"http://www.roblox.com/asset/?id=112554223509763",
-		"rbxassetid://4805639000",
-		"rbxassetid://6198493000",
-		"rbxassetid://10709790948",
-		"rbxassetid://18518299306",
-		"rbxassetid://10747362393",
-		"rbxassetid://18720640102",
-		"rbxassetid://10723344270",
-		"rbxassetid://109535175596957",
-		"rbxassetid://10747384394",
-		"rbxassetid://10734941499",
-		Compkiller.Logo,
-	};
-
-	if Compkiller.SecureMode then
-		for i,v in next , RequiredAssets do task.wait()
-			pcall(function()
-				Compkiller:CacheImage(v);
-			end);
-		end;
-	else
-		local ContentProvider: ContentProvider = cloneref(game:GetService('ContentProvider'));
-
-		for i,v in next , RequiredAssets do
-			ContentProvider:Preload(v);
-		end;
-	end;
-end;
+    Compkiller.__PRELOADING_ICONS = true
+    local RequiredAssets = {
+        "rbxassetid://112554223509763", "rbxassetid://4805639000", "rbxassetid://6198493000",
+        "rbxassetid://10709790948", "rbxassetid://18518299306", "rbxassetid://10747362393",
+        "rbxassetid://18720640102", "rbxassetid://10723344270", "rbxassetid://109535175596957",
+        "rbxassetid://10747384394", "rbxassetid://10734941499", Compkiller.Logo,
+    }
+    
+    if Compkiller.SecureMode then
+        for _, asset in ipairs(RequiredAssets) do
+            task.spawn(function()
+                pcall(function()
+                    Compkiller:CacheImage(asset)
+                end)
+            end)
+        end
+    else
+        local ContentProvider = game:GetService("ContentProvider")
+        ContentProvider:Preload(RequiredAssets)
+    end
+    
+    task.delay(1, function()
+        Compkiller.__PRELOADING_ICONS = false
+    end)
+end
 
 function Compkiller:Security(directory: string,Config: SecurityConfig) -- Security Mode
 	directory = directory or "blydinet-cache";
@@ -9776,24 +9772,45 @@ function Compkiller.new(Config : Window)
 		end;
 
 		function WindowArgs:Toggle(Value: boolean)
-			if WindowArgs.PerformanceMode then
-				MainFrame.Visible = Value;
-			end;
-
-			WindowOpen:Fire(Value);
-
-			if Value then
-				for i,v in next , WindowArgs.Tabs do
-					if v.Root == WindowArgs.SelectedTab then
-						v.Remote:Fire(true);
-					end;
-				end;
-			else
-				for i,v in next , WindowArgs.Tabs do
-					v.Remote:Fire(false);
-				end;
-			end;
-		end;
+		    if Value == WindowArgs.IsOpen then return end
+		    
+		    WindowArgs.IsOpen = Value
+		    WindowOpen:Fire(Value)
+		    
+		    if not Value then
+		        for _, thread in ipairs(WindowArgs.THREADS) do
+		            if typeof(thread) == "thread" then
+		                pcall(function() task.cancel(thread) end)
+		            end
+		        end
+		
+		        for _, tab in ipairs(WindowArgs.Tabs) do
+		            if tab.Connection then
+		                tab.Connection:Disconnect()
+		                tab.Connection = nil
+		            end
+		        end
+		        
+		        if WindowArgs.UserSettings and WindowArgs.UserSettings.Root then
+		            WindowArgs.UserSettings.Root:Destroy()
+		            WindowArgs.UserSettings = nil
+		        end
+		        
+		        WindowArgs.THREADS = {}
+		    end
+		    
+		    if Value then
+		        for i,v in next, WindowArgs.Tabs do
+		            if v.Root == WindowArgs.SelectedTab then
+		                v.Remote:Fire(true)
+		            end
+		        end
+		    else
+		        for i,v in next, WindowArgs.Tabs do
+		            v.Remote:Fire(false)
+		        end
+		    end
+		end
 
 		function WindowArgs:_ToggleUI()
 			WindowArgs.IsOpen = not WindowArgs.IsOpen;
