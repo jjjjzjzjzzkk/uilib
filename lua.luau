@@ -2478,7 +2478,7 @@ function Compkiller:Security(directory: string) -- Security Mode
 		makefolder(directory);
 	end;
 
-	Compkiller.SecureMode = true;
+	Compkiller.SecureMode = false;
 
 	Compkiller.CacheDirectory = directory;
 end;
