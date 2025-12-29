@@ -1,18 +1,3 @@
---[[
-    Octohook
-    -> Made by @finobe 
-    -> Kind of got bored idk what to do with life
-    -> Reason for leak: 
-    User was offered free features when the library was finished as compensation for the wait
-    Then proceeded to ask for more and started harassing other customers and me over petty shit. 
-    Yes this user said the library is TRASH somehow.. sob
-
-    Anyways bringing u this pretty sexy library I spent like a week on it maybe less. 
-    Esp preview took me a couple hours to make but holy the amount of bug fixing is insane
-
-    LIBRARY MAY HAVE MISSING OPTIMISATION THAT IS REQUIRED FOR 0 FPS LOSS WHEN DRAGGING / CLOSING THE MENU. 
-    ^^ Dont have to be worried about this its pretty darn optimised for the amount of elements I store 
-]]
 
 -- Variables 
     local InputService, HttpService, GuiService, RunService, Stats, CoreGui, TweenService, SoundService, Workspace, Players, Lighting = game:GetService("UserInputService"), game:GetService("HttpService"), game:GetService("GuiService"), game:GetService("RunService"), game:GetService("Stats"), game:GetService("CoreGui"), game:GetService("TweenService"), game:GetService("SoundService"), game:GetService("Workspace"), game:GetService("Players"), game:GetService("Lighting")
@@ -5299,7 +5284,7 @@
             ["Box Gradient Rotation"] = 90;
             ["Box Fill"] = false; 
             ["Box Spin"] = false;
-            ["Box Gradient Spin"] = false;
+            
             ["Box Fill 1"] = { Color = rgb(0, 255, 255), Transparency = 0.9 };
             ["Box Fill 2"] = { Color = rgb(0, 255, 255), Transparency = 0.9 };
             ["Box Fill Rotation"] = 0;
@@ -5325,7 +5310,13 @@
             ["Name_Text_Position"] = "Top";
             ["Name_Text_Font"] = "ProggyClean";
             ["Name_Text_Size"] = 12;
-            
+
+            ["Tool_Text"] = false; 
+            ["Tool_Text_Color"] = { Color = rgb(255, 255, 255) };
+            ["Tool_Text_Position"] = "Bottom";
+            ["Tool_Text_Font"] = "ProggyClean";
+            ["Tool_Text_Size"] = 12;
+
             ["Distance_Text"] = false; 
             ["Distance_Text_Color"] = { Color = rgb(255, 255, 255) };
             ["Distance_Text_Position"] = "Bottom";
@@ -7038,14 +7029,7 @@
 
                             Options["Box Fill"] = bool
                         end, Flag = Config.Flag .. "_BOX_FILL_ENABLED"})
-                        Elements.Options.BoxFillToggle = Section:Toggle({Name = "Box Spin", Callback = function(bool)
-    
-                            Options["Box Spin"] = bool
-                        end, Flag = Config.Flag .. "_BOX_Spin_ENABLED"})
-                        Elements.Options.BoxFillToggle = Section:Toggle({Name = "Box Gradient Spin", Callback = function(bool)
-    
-                            Options["Box Gradient Spin"] = bool
-                        end, Flag = Config.Flag .. "_BOX_Gradient_Spin_ENABLED"})
+
                         Elements.Options.BoxFill1 = Elements.Options.BoxFillToggle:Colorpicker({Name = "Top Gradient", Callback = function(color, alpha)
                             local Path = Elements.CornersGradient
                             Path.Transparency = numseq{
@@ -8059,6 +8043,25 @@
                         Parent = Items.Distance;
                         LineJoinMode = Enum.LineJoinMode.Miter
                     });
+
+                    Items.Tools = Esp:Create( "TextLabel", {
+                        FontFace = Fonts.ProggyClean;
+                        TextColor3 = rgb(255, 255, 255);
+                        BorderColor3 = rgb(0, 0, 0);
+                        Parent = Esp.Cache;
+                        Name = "Left";
+                        BackgroundTransparency = 1;
+                        Size = dim2(1, 0, 0, 0);
+                        BorderSizePixel = 0;
+                        AutomaticSize = Enum.AutomaticSize.XY;
+                        TextSize = 9;
+                        BackgroundColor3 = rgb(255, 255, 255)
+                    });
+
+                    Esp:Create( "UIStroke", {
+                        Parent = Items.Tools;
+                        LineJoinMode = Enum.LineJoinMode.Miter
+                    });
                 -- 
             end       
 
@@ -8364,7 +8367,11 @@
                 if DistanceLabel.Text ~= Text then 
                     DistanceLabel.Text = Text
                 end 
-                
+                local ToolsLabel = Items.Tools
+                local Text = tostring( math.round(Distance) )  .. "m"
+                if ToolsLabel.Text ~= Text then 
+                    ToolsLabel.Text = Text
+                end 
                 if Options["Box Fill"] and Options["Box Spin"] then 
                     Items["Holder_gradient"].Rotation += Options["Box Spin Speed"] / 100
                 end
@@ -8582,6 +8589,9 @@
                     elseif string.match(key, "Distance") then 
                         Text = Items.Distance
                         Match = "Distance"
+                    elseif string.match(key, "Tools") then 
+                        Text = Items.Tools
+                        Match = "Tools"
                     end 
 
                     if Text then 
