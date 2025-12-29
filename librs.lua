@@ -8,7 +8,7 @@ function Notify(tt, tx, dur)
     })
 end
 
-Notify("ui test", "version 1.0.5", 5)
+Notify("ui test", "version 1.0.8", 5)
 
     local InputService, HttpService, GuiService, RunService, Stats, CoreGui, TweenService, SoundService, Workspace, Players, Lighting = game:GetService("UserInputService"), game:GetService("HttpService"), game:GetService("GuiService"), game:GetService("RunService"), game:GetService("Stats"), game:GetService("CoreGui"), game:GetService("TweenService"), game:GetService("SoundService"), game:GetService("Workspace"), game:GetService("Players"), game:GetService("Lighting")
     local Camera, LocalPlayer, gui_offset = Workspace.CurrentCamera, Players.LocalPlayer, GuiService:GetGuiInset().Y
@@ -196,21 +196,7 @@ Notify("ui test", "version 1.0.5", 5)
 
 -- Library functions 
     -- Misc functions
-        local activeUIElements = {}
 
-
-        Library:Connection(InputService.InputBegan, function(input, gameProcessedEvent)
-            if gameProcessedEvent then return end
-            
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                for i = #activeUIElements, 1, -1 do
-                    local element = activeUIElements[i]
-                    if element.CloseOnClickOutside and element:IsVisible() and not Library:Hovering(element.MainElement) then
-                        element:Close()
-                    end
-                end
-            end
-        end)
         function Library:GetTransparency(obj)
             if obj:IsA("Frame") then
                 return {"BackgroundTransparency"}
@@ -304,7 +290,21 @@ Notify("ui test", "version 1.0.5", 5)
                 end
             end)
         end
-        
+        local activeUIElements = {}
+
+
+        Library:Connection(InputService.InputBegan, function(input, gameProcessedEvent)
+            if gameProcessedEvent then return end
+            
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                for i = #activeUIElements, 1, -1 do
+                    local element = activeUIElements[i]
+                    if element.CloseOnClickOutside and element:IsVisible() and not Library:Hovering(element.MainElement) then
+                        element:Close()
+                    end
+                end
+            end
+        end)
         function Library:Hovering(Object)
             local mouseX, mouseY = Mouse.X, Mouse.Y
             
