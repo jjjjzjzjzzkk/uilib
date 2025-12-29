@@ -1,20 +1,4 @@
---[[
-    Octohook
-    -> Made by @finobe 
-    -> Kind of got bored idk what to do with life
-    -> Reason for leak: 
-    User was offered free features when the library was finished as compensation for the wait
-    Then proceeded to ask for more and started harassing other customers and me over petty shit. 
-    Yes this user said the library is TRASH somehow.. sob
 
-    Anyways bringing u this pretty sexy library I spent like a week on it maybe less. 
-    Esp preview took me a couple hours to make but holy the amount of bug fixing is insane
-
-    LIBRARY MAY HAVE MISSING OPTIMISATION THAT IS REQUIRED FOR 0 FPS LOSS WHEN DRAGGING / CLOSING THE MENU. 
-    ^^ Dont have to be worried about this its pretty darn optimised for the amount of elements I store 
-]]
-
--- Variables 
     local InputService, HttpService, GuiService, RunService, Stats, CoreGui, TweenService, SoundService, Workspace, Players, Lighting = game:GetService("UserInputService"), game:GetService("HttpService"), game:GetService("GuiService"), game:GetService("RunService"), game:GetService("Stats"), game:GetService("CoreGui"), game:GetService("TweenService"), game:GetService("SoundService"), game:GetService("Workspace"), game:GetService("Players"), game:GetService("Lighting")
     local Camera, LocalPlayer, gui_offset = Workspace.CurrentCamera, Players.LocalPlayer, GuiService:GetGuiInset().Y
     local Mouse = LocalPlayer:GetMouse()
@@ -8103,18 +8087,15 @@
             end   
 
             Data.ToolAdded = function(item)
-                -- if not item:FindFirstChild("ItemRoot") then 
-                --     return 
-                -- end 
+                if not item:IsA("Tool") then 
+                    return 
+                end 
+                local exists = Data.Info.Character:FindFirstChild(item.Name) 
+                Items.Tools.Text = exists and ("[" .. item.Name .. "]") or ""
+                pcall(function()
+                    Items.Tools.Parent = exists and Items["BottomTexts"] or Esp.Cache  
+                end)
 
-                -- local exists = Data.Info.Character:FindFirstChild(item.Name) 
-                -- Items["weapon"].Text = "[" .. item.Name .. "]"
-
-                -- pcall(function()
-                --     Items["weapon"].Parent = exists and Items["Holder"] or Esp.Cache
-                -- end)
-
-                -- Refresh
             end
 
             Data.HealthChanged = function(Value)
@@ -8382,11 +8363,14 @@
                 if DistanceLabel.Text ~= Text then 
                     DistanceLabel.Text = Text
                 end 
-                local ToolsLabel = Items.Tools
-                local Text = tostring( math.round(Distance) )  .. "m"
-                if ToolsLabel.Text ~= Text then 
-                    ToolsLabel.Text = Text
-                end 
+                local toolName = ""
+                    local equippedTool = Data.Info.Character:FindFirstChildOfClass("Tool")
+                    if equippedTool then
+                        toolName = "[" .. equippedTool.Name .. "]"
+                    end
+                    if Items.Tools.Text ~= toolName then
+                        Items.Tools.Text = toolName
+                    end
                 if Options["Box Fill"] and Options["Box Spin"] then 
                     Items["Holder_gradient"].Rotation += Options["Box Spin Speed"] / 100
                 end
