@@ -1,4 +1,15 @@
 
+function Notify(tt, tx, dur)
+    dur = dur or 4
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = tt,
+        Text = tx,
+        Duration = dur
+    })
+end
+
+Notify("ui test", "version 1.0.5", 5)
+
     local InputService, HttpService, GuiService, RunService, Stats, CoreGui, TweenService, SoundService, Workspace, Players, Lighting = game:GetService("UserInputService"), game:GetService("HttpService"), game:GetService("GuiService"), game:GetService("RunService"), game:GetService("Stats"), game:GetService("CoreGui"), game:GetService("TweenService"), game:GetService("SoundService"), game:GetService("Workspace"), game:GetService("Players"), game:GetService("Lighting")
     local Camera, LocalPlayer, gui_offset = Workspace.CurrentCamera, Players.LocalPlayer, GuiService:GetGuiInset().Y
     local Mouse = LocalPlayer:GetMouse()
@@ -185,6 +196,21 @@
 
 -- Library functions 
     -- Misc functions
+        local activeUIElements = {}
+
+
+        Library:Connection(InputService.InputBegan, function(input, gameProcessedEvent)
+            if gameProcessedEvent then return end
+            
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                for i = #activeUIElements, 1, -1 do
+                    local element = activeUIElements[i]
+                    if element.CloseOnClickOutside and element:IsVisible() and not Library:Hovering(element.MainElement) then
+                        element:Close()
+                    end
+                end
+            end
+        end)
         function Library:GetTransparency(obj)
             if obj:IsA("Frame") then
                 return {"BackgroundTransparency"}
@@ -211,23 +237,27 @@
         end
         
         function Library:Fade(obj, prop, vis, speed)
-            if not (obj and prop) then
+            if not (obj and prop) or not obj:IsDescendantOf(game) then
+                return
+            end
+            
+            local currentTransparency = obj[prop]
+            if currentTransparency == nil then
+                return
+            end
+            
+            local targetValue = vis and 0 or 1
+            if currentTransparency == targetValue then
                 return
             end
 
-            local OldTransparency = obj[prop]
-            obj[prop] = vis and 1 or OldTransparency
-
-            local Tween = Library:Tween(obj, { [prop] = vis and OldTransparency or 1 }, TweenInfo.new(speed or Library.TweeningSpeed, Library.EasingStyle, Enum.EasingDirection.InOut, 0, false, 0))
+            if Library.PerformanceMode or (speed and speed < 0.05) then
+                obj[prop] = targetValue
+                return
+            end
             
-            Library:Connection(Tween.Completed, function()
-                if not vis then
-                    task.wait()
-                    obj[prop] = OldTransparency
-                end
-            end)
-
-            return Tween
+            obj[prop] = vis and 1 or currentTransparency
+            return Library:Tween(obj, {[prop] = targetValue}, TweenInfo.new(speed or Library.TweeningSpeed, Library.EasingStyle, Enum.EasingDirection.InOut))
         end
 
         function Library:Resizify(Parent)
@@ -276,21 +306,24 @@
         end
         
         function Library:Hovering(Object)
-            if type(Object) == "table" then 
-                local Pass = false;
-
-                for _,obj in Object do 
-                    if Library:Hovering(obj) then 
-                        Pass = true
-                        return Pass
-                    end 
-                end 
-            else 
-                local y_cond = Object.AbsolutePosition.Y <= Mouse.Y and Mouse.Y <= Object.AbsolutePosition.Y + Object.AbsoluteSize.Y
-                local x_cond = Object.AbsolutePosition.X <= Mouse.X and Mouse.X <= Object.AbsolutePosition.X + Object.AbsoluteSize.X
+            local mouseX, mouseY = Mouse.X, Mouse.Y
+            
+            if type(Object) == "table" then
+                for _, obj in ipairs(Object) do
+                    if Library:Hovering(obj) then
+                        return true
+                    end
+                end
+                return false
+            else
+                local absPos = Object.AbsolutePosition
+                local absSize = Object.AbsoluteSize
                 
-                return (y_cond and x_cond)
-            end 
+                return mouseX >= absPos.X and 
+                    mouseX <= absPos.X + absSize.X and 
+                    mouseY >= absPos.Y and 
+                    mouseY <= absPos.Y + absSize.Y
+            end
         end  
 
         function Library:ConvertHex(color)
@@ -3860,14 +3893,15 @@
                 Cfg.SetVisible(Cfg.Open)
             end)
 
-            Library:Connection(InputService.InputBegan, function(input, game_event)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    if not Library:Hovering({Items.DropdownElements, Items.Dropdown}) then
-                        Cfg.SetVisible(false)
-                        Cfg.Open = false
-                    end 
-                end 
-            end)
+            table.insert(activeUIElements, {
+                MainElement = {Items.DropdownElements, Items.Dropdown},
+                CloseOnClickOutside = true,
+                IsVisible = function() return Cfg.Open end,
+                Close = function() 
+                    Cfg.SetVisible(false) 
+                    Cfg.Open = false 
+                end
+            })
 
             if Cfg.Search then 
                 Items.Textbox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -4329,13 +4363,12 @@
             end
 
             function Cfg.SetVisible(bool)
-                if Cfg.Tweening then  
-                    return 
-                end 
 
-                Items.Information.Position = dim2(0, Items.Keybind.AbsolutePosition.X + 2, 0, Items.Keybind.AbsolutePosition.Y + 74)
-               
-                Cfg.Tween(bool)
+                Library:SetVisible(Items.DropdownElements, bool)
+        
+                if bool then
+                    Items.DropdownElements.Position = dim2(0, Items.Outline.AbsolutePosition.X, 0, Items.Outline.AbsolutePosition.Y + 80)
+                end
             end
 
             function Cfg.Tween(bool) 
