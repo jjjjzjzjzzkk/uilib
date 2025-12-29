@@ -6,7 +6,7 @@ function Notify(tt, tx, dur)
         Duration = dur
     })
 end
- Notify("ui test", "version 1.0.9", 5)
+ Notify("ui test", "version 1.1.1", 5)
     local InputService, HttpService, GuiService, RunService, Stats, CoreGui, TweenService, SoundService, Workspace, Players, Lighting = game:GetService("UserInputService"), game:GetService("HttpService"), game:GetService("GuiService"), game:GetService("RunService"), game:GetService("Stats"), game:GetService("CoreGui"), game:GetService("TweenService"), game:GetService("SoundService"), game:GetService("Workspace"), game:GetService("Players"), game:GetService("Lighting")
     local Camera, LocalPlayer, gui_offset = Workspace.CurrentCamera, Players.LocalPlayer, GuiService:GetGuiInset().Y
     local Mouse = LocalPlayer:GetMouse()
@@ -3746,12 +3746,14 @@ end
             end
             
             function Cfg.SetVisible(bool)
+                if Cfg.Tweening == true then
+                    return 
+                end 
 
-                Library:SetVisible(Items.DropdownElements, bool)
+                Items.Colorpicker.Position = dim2(0, Items.ColorpickerObject.AbsolutePosition.X + 2, 0, Items.ColorpickerObject.AbsolutePosition.Y + 74)
                 
-                if bool then
-                    Items.DropdownElements.Position = dim2(0, Items.Outline.AbsolutePosition.X, 0, Items.Outline.AbsolutePosition.Y + 80)
-                end
+                Cfg.Tween(bool)
+                Cfg.Set(hsv(h, s, v), a)
             end
             
             function Cfg.Set(value)
