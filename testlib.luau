@@ -1,3 +1,4 @@
+
 local LoadingTick = os.clock()
 
 if getgenv().Library then
@@ -1385,10 +1386,10 @@ local Library do
         },
 
         Folders = {
-            Directory = "kiwisense",
-            Configs = "kiwisense/Configs",
-            Assets = "kiwisense/Assets",
-            Themes = "kiwisense/Themes"
+            Directory = "blydi.net",
+            Configs = "blydi.net/Configs",
+            Assets = "blydi.net/Assets",
+            Themes = "blydi.net/Themes"
         },
 
         Images = { -- you're welcome to reupload the images and replace it with your own links
@@ -6233,7 +6234,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+                })  Items["Logo"]:AddToTheme({ImageColor3 = FromRGB(255, 255, 255)})
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
@@ -6903,7 +6904,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+                })  Items["Logo"]:AddToTheme({ImageColor3 = FromRGB(255, 255, 255)})
 
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Watermark"].Instance,
@@ -7113,7 +7114,7 @@ local Library do
             Data = Data or { }
 
             local Window = {
-                Name = Data.Name or Data.name or "kiwisense",
+                Name = Data.Name or Data.name or "blydi.net",
                 Logo = Data.Logo or Data.logo or "135215559087473",
                 FadeSpeed = Data.FadeSpeed or Data.fadespeed or 0.2,
                 Version = Data.Version or Data.version or "v1.0.0 alpha",
@@ -7276,7 +7277,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+                })  Items["Logo"]:AddToTheme({ImageColor3 = FromRGB(255, 255, 255)})
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
