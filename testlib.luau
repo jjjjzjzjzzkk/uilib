@@ -92,8 +92,8 @@ local Options, MiscOptions do
         ["Healthbar_Medium"] = { Color = rgb(255, 255, 0), Transparency = 1};
         ["Healthbar_Animations"] = false; 
         ["Healthbar_High"] = { Color = rgb(0, 255, 0), Transparency = 1};
-        ["Healthbar_Font"] = "Verdana";
-        ["Healthbar_Text_Size"] = 11;
+        ["Healthbar_Font"] = "ProggyClean";
+        ["Healthbar_Text_Size"] = 12;
         ["Healthbar_Thickness"] = 1;
         ["Healthbar_Tween"] = false;
         ["Healthbar_EasingStyle"] = "Circular";
@@ -104,14 +104,14 @@ local Options, MiscOptions do
         ["Name_Text"] = false; 
         ["Name_Text_Color"] = { Color = rgb(255, 255, 255) };
         ["Name_Text_Position"] = "Top";
-        ["Name_Text_Font"] = "Verdana";
-        ["Name_Text_Size"] = 11;
+        ["Name_Text_Font"] = "ProggyClean";
+        ["Name_Text_Size"] = 12;
         
         ["Distance_Text"] = false; 
         ["Distance_Text_Color"] = { Color = rgb(255, 255, 255) };
         ["Distance_Text_Position"] = "Bottom";
-        ["Distance_Text_Font"] = "Verdana";
-        ["Distance_Text_Size"] = 11;
+        ["Distance_Text_Font"] = "ProggyClean";
+        ["Distance_Text_Size"] = 12;
     };  
 
     Options = setmetatable({}, {__index = MiscOptions, __newindex = function(self, key, value) Esp.RefreshElements(key, value) end});
@@ -2045,7 +2045,7 @@ local Library do
             ["Dark Gradient"] = FromRGB(211, 211, 211),
             ["Inactive Text"] = FromRGB(185, 185, 185),
             ["Element"] = FromRGB(58, 66, 77),
-            ["Accent"] = FromRGB(31, 106, 181),
+            ["Accent"] = FromRGB(255, 255, 255),
             ["Border"] = FromRGB(48, 56, 63)
         },
 
@@ -6234,11 +6234,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({
-                        ImageColor3 = function()
-                            return FromRGB(255, 255, 255)
-                        end
-                    })
+                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
@@ -6908,11 +6904,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({
-                        ImageColor3 = function()
-                            return FromRGB(255, 255, 255)
-                        end
-                    })
+                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
 
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Watermark"].Instance,
@@ -7285,11 +7277,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({
-                        ImageColor3 = function()
-                            return FromRGB(255, 255, 255)
-                        end
-                    })
+                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
