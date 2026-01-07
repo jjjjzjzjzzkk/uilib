@@ -2045,7 +2045,7 @@ local Library do
             ["Dark Gradient"] = FromRGB(211, 211, 211),
             ["Inactive Text"] = FromRGB(185, 185, 185),
             ["Element"] = FromRGB(58, 66, 77),
-            ["Accent"] = FromRGB(255, 255, 255),
+            ["Accent"] = FromRGB(31, 106, 181),
             ["Border"] = FromRGB(48, 56, 63)
         },
 
@@ -6234,7 +6234,11 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+                })  Items["Logo"]:AddToTheme({
+                        ImageColor3 = function()
+                            return FromRGB(255, 255, 255)
+                        end
+                    })
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
@@ -6904,7 +6908,11 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+                })  Items["Logo"]:AddToTheme({
+                        ImageColor3 = function()
+                            return FromRGB(255, 255, 255)
+                        end
+                    })
 
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Watermark"].Instance,
@@ -7277,7 +7285,11 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+                })  Items["Logo"]:AddToTheme({
+                        ImageColor3 = function()
+                            return FromRGB(255, 255, 255)
+                        end
+                    })
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
