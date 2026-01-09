@@ -772,18 +772,7 @@ local Options, MiscOptions do
             end
         
             Data.ToolAdded = function(item)
-                if not item:FindFirstChild("ItemRoot") then 
-                    return 
-                end 
 
-                local exists = Data.Info.Character:FindFirstChild(item.Name) 
-                Items["weapon"].Text = "[" .. item.Name .. "]"
-
-                pcall(function()
-                    Items["weapon"].Parent = exists and Items["Holder"] or Esp.Cache
-                end)
-
-                -- Refresh
             end
 
             Data.HealthChanged = function(Value)
