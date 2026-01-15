@@ -1,4 +1,3 @@
-
 local LoadingTick = os.clock()
 
 if getgenv().Library then
@@ -92,8 +91,8 @@ local Options, MiscOptions do
         ["Healthbar_Medium"] = { Color = rgb(255, 255, 0), Transparency = 1};
         ["Healthbar_Animations"] = false; 
         ["Healthbar_High"] = { Color = rgb(0, 255, 0), Transparency = 1};
-        ["Healthbar_Font"] = "ProggyClean";
-        ["Healthbar_Text_Size"] = 12;
+        ["Healthbar_Font"] = "Verdana";
+        ["Healthbar_Text_Size"] = 11;
         ["Healthbar_Thickness"] = 1;
         ["Healthbar_Tween"] = false;
         ["Healthbar_EasingStyle"] = "Circular";
@@ -104,14 +103,14 @@ local Options, MiscOptions do
         ["Name_Text"] = false; 
         ["Name_Text_Color"] = { Color = rgb(255, 255, 255) };
         ["Name_Text_Position"] = "Top";
-        ["Name_Text_Font"] = "ProggyClean";
-        ["Name_Text_Size"] = 12;
+        ["Name_Text_Font"] = "Verdana";
+        ["Name_Text_Size"] = 11;
         
         ["Distance_Text"] = false; 
         ["Distance_Text_Color"] = { Color = rgb(255, 255, 255) };
         ["Distance_Text_Position"] = "Bottom";
-        ["Distance_Text_Font"] = "ProggyClean";
-        ["Distance_Text_Size"] = 12;
+        ["Distance_Text_Font"] = "Verdana";
+        ["Distance_Text_Size"] = 11;
     };  
 
     Options = setmetatable({}, {__index = MiscOptions, __newindex = function(self, key, value) Esp.RefreshElements(key, value) end});
@@ -772,7 +771,18 @@ local Options, MiscOptions do
             end
         
             Data.ToolAdded = function(item)
+                if not item:FindFirstChild("ItemRoot") then 
+                    return 
+                end 
 
+                local exists = Data.Info.Character:FindFirstChild(item.Name) 
+                Items["weapon"].Text = "[" .. item.Name .. "]"
+
+                pcall(function()
+                    Items["weapon"].Parent = exists and Items["Holder"] or Esp.Cache
+                end)
+
+                -- Refresh
             end
 
             Data.HealthChanged = function(Value)
@@ -781,7 +791,8 @@ local Options, MiscOptions do
                 end 
 
                 local Humanoid = Data.Info.Humanoid
-                local Multiplier = Value / 100
+                local MaxHealth = Humanoid.MaxHealth
+                local Multiplier = math.clamp(Value / (MaxHealth > 0 and MaxHealth or 100), 0, 1) 
                 local isHorizontal = MiscOptions.Healthbar_Position == "Top" or MiscOptions.Healthbar_Position == "Bottom"
 
                 local Color = MiscOptions.Healthbar_Low.Color:Lerp(MiscOptions.Healthbar_Medium.Color, Multiplier)
@@ -805,9 +816,9 @@ local Options, MiscOptions do
                             end 
 
                             local Elapsed = tick() - Start
-                            local Alpha = math.clamp(Elapsed, 0, 1)
+                            local Alpha = math.clamp(Elapsed / MiscOptions.Healthbar_Easing_Speed, 0, 1)  -- Normalize alpha based on speed
 
-                            local Value = Esp:Lerp(
+                            local InterpolatedValue = Esp:Lerp(
                                 Data.Info.Health, 
                                 Value, 
                                 TweenService:GetValue(
@@ -817,7 +828,7 @@ local Options, MiscOptions do
                                 )
                             )   
 
-                            Items.HealthbarText.Text = math.floor(Value)
+                            Items.HealthbarText.Text = math.floor(InterpolatedValue)
 
                             if Elapsed >= MiscOptions.Healthbar_Easing_Speed then 
                                 Data.Info.Health = Value 
@@ -836,13 +847,13 @@ local Options, MiscOptions do
                 end 
             end
 
-            Data.RefreshDescendants = function() 
+             Data.RefreshDescendants = function() 
                 local Character = (typechar and player) or player.Character or player.CharacterAdded:Wait()
                 local Humanoid = Character:FindFirstChild("Humanoid") or Character:WaitForChild( "Humanoid" )
                 
                 Data.Info.Character = typechar and player or Character
                 Data.Info.Humanoid = Humanoid
-                Data.Info.rootpart = Humanoid.RootPart
+                Data.Info.RootPart = Humanoid.RootPart
 
                 Esp:Connection(Humanoid.HealthChanged, Data.HealthChanged)
                 Esp:Connection(Character.ChildAdded, Data.ToolAdded)
@@ -857,6 +868,8 @@ local Options, MiscOptions do
                     Items["Holder"]:Destroy()
                 end 
 
+                Data.Highlight:Destroy()  
+
                 if Esp.Players[index] then 
                     Esp.Players[index] = nil
                 end 
@@ -864,7 +877,8 @@ local Options, MiscOptions do
 
             Data.RefreshDescendants()
             Esp:Connection(Data.Info.Character.ChildAdded, Data.ToolAdded)
-            Esp:Connection(player.CharacterAdded, Data.RefreshDescendants)
+            Esp:Connection(player.CharacterAdded, Data.RefreshDescendants) 
+
             
             -- Recaching element holders that arent neccessary <- roblox calculates math for them even if they have no objects in them or invisible ;(
             for _,ItemParentor in {Items.Left, Items.Right, Items.Top, Items.Bottom} do  
@@ -1128,7 +1142,6 @@ local Options, MiscOptions do
                             Items.HealthbarGradient.Rotation = 90
                         end 
 
-                        Data.HealthChanged(Data.Info.Humanoid.Health)
                     end 
                     
                     if key == "Healthbar_Number" then  
@@ -1272,18 +1285,6 @@ local Options, MiscOptions do
         end 
     end
 
-    for _,player in Players:GetPlayers() do 
-        if player == Players.LocalPlayer then continue end
-        Esp.CreateObject(player)
-    end 
-
-    Esp:Connection(Players.PlayerRemoving, Esp.RemovePlayer)
-    Esp:Connection(Players.PlayerAdded, function(player)
-        Esp.CreateObject(player)
-        for index,value in MiscOptions do 
-            Options[index] = value -- gotta trigger that new index
-        end 
-    end)
 
     Esp.Loop = RunService:BindToRenderStep("Run Loop", 0, Esp.Update)
 
@@ -1375,10 +1376,10 @@ local Library do
         },
 
         Folders = {
-            Directory = "blydi.net",
-            Configs = "blydi.net/Configs",
-            Assets = "blydi.net/Assets",
-            Themes = "blydi.net/Themes"
+            Directory = "kiwisense",
+            Configs = "kiwisense/Configs",
+            Assets = "kiwisense/Assets",
+            Themes = "kiwisense/Themes"
         },
 
         Images = { -- you're welcome to reupload the images and replace it with your own links
@@ -6223,11 +6224,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({
-                        ImageColor3 = function()
-                            return FromRGB(255, 255, 255)
-                        end
-                    })
+                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
@@ -6897,11 +6894,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({
-                        ImageColor3 = function()
-                            return FromRGB(255, 255, 255)
-                        end
-                    })
+                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
 
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Watermark"].Instance,
@@ -7111,7 +7104,7 @@ local Library do
             Data = Data or { }
 
             local Window = {
-                Name = Data.Name or Data.name or "blydi.net",
+                Name = Data.Name or Data.name or "kiwisense",
                 Logo = Data.Logo or Data.logo or "135215559087473",
                 FadeSpeed = Data.FadeSpeed or Data.fadespeed or 0.2,
                 Version = Data.Version or Data.version or "v1.0.0 alpha",
@@ -7274,11 +7267,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Logo"]:AddToTheme({
-                        ImageColor3 = function()
-                            return FromRGB(255, 255, 255)
-                        end
-                    })
+                })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
 
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
