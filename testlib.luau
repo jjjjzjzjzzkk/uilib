@@ -243,7 +243,7 @@ local Options, MiscOptions do
             return tween
         end
 
-        function Esp.CreateObject( player, typechar ) -- IMPORTANT!
+        function Esp.CreateObject( player, typechar )
             local Data = { 
                 Items = { }, 
                 Info = {Character; Humanoid; Health = 0}; 
@@ -847,9 +847,9 @@ local Options, MiscOptions do
                 end 
             end
 
-             Data.RefreshDescendants = function() 
-                local Character = (typechar and player) or player.Character or player.CharacterAdded:Wait()
-                local Humanoid = Character:FindFirstChild("Humanoid") or Character:WaitForChild( "Humanoid" )
+            Data.RefreshDescendants = function() 
+                local Character = (typechar and player) or player.Character 
+                local Humanoid = Character:FindFirstChild("Humanoid") 
                 
                 Data.Info.Character = typechar and player or Character
                 Data.Info.Humanoid = Humanoid
@@ -868,17 +868,13 @@ local Options, MiscOptions do
                     Items["Holder"]:Destroy()
                 end 
 
-                Data.Highlight:Destroy()  
-
                 if Esp.Players[index] then 
                     Esp.Players[index] = nil
                 end 
             end 
 
             Data.RefreshDescendants()
-            Esp:Connection(Data.Info.Character.ChildAdded, Data.ToolAdded)
-            Esp:Connection(player.CharacterAdded, Data.RefreshDescendants) 
-
+            Esp:Connection(player.CharacterAdded, Data.RefreshDescendants)
             
             -- Recaching element holders that arent neccessary <- roblox calculates math for them even if they have no objects in them or invisible ;(
             for _,ItemParentor in {Items.Left, Items.Right, Items.Top, Items.Bottom} do  
