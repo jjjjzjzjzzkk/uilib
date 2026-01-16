@@ -1380,7 +1380,15 @@ end
         end 
     end
 
+	for _,player in Players:GetPlayers() do 
+        if player == Players.LocalPlayer then continue end
+        Esp.CreateObject(player)
+    end 
 
+    Esp:Connection(Players.PlayerRemoving, Esp.RemovePlayer)
+    Esp:Connection(Players.PlayerAdded, function(player)
+        Esp.CreateObject(player)
+    end)
     Esp.Loop = RunService:BindToRenderStep("Run Loop", 0, Esp.Update)
 
     for index,value in MiscOptions do 
